@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "344669898109",
+    "firebase_url": "https://food-delvery.firebaseio.com",
+    "project_id": "food-delvery",
+    "storage_bucket": "food-delvery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344669898109:android:f9b9d80d021bc9c16a3814",
+        "android_client_info": {
+          "package_name": "com.example.hello_world"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344669898109-18bbkhqmirtggbpb8vhs1uqsqrtf9v32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hello_world",
+            "certificate_hash": "e13b0bdcec991bf2d84af5ea57ca8941c69a2db4"
+          }
+        },
+        {
+          "client_id": "344669898109-lnv06qj7i72gsc3rc5qtm1rhjvvig0fv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXT3aGeIfMT6Xc1aInjjDACsqkh2WxeAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344669898109-lnv06qj7i72gsc3rc5qtm1rhjvvig0fv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
