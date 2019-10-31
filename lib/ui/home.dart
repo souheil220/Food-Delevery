@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
             for(var restaurant in _data)
              ItemContainer(restaurant: restaurant,)
           ],
-        )
+        ),
       ),
     );
   }

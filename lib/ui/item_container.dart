@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hello_world/ui/restaurants_menu.dart';
 import 'items.dart';
 
 class ItemContainer extends StatelessWidget {
@@ -10,7 +11,15 @@ class ItemContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        getData();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => RestaurantsMenu(
+              result: getData(),
+            ),
+          ),
+        );
+       // print(getData().runtimeType);
       },
       child: Items(
           imgUrl: restaurant['image'],
@@ -19,10 +28,18 @@ class ItemContainer extends StatelessWidget {
     );
   }
 
-  void getData() async{
-Firestore.instance.collection('restaurant').document('${restaurant['nom']}')
-.get().then((DocumentSnapshot) =>
-      print(DocumentSnapshot.data.toString())
-);
-}
+  Future<Map<String, dynamic>> getData() async {
+    var result;
+   await Firestore.instance
+        .collection('restaurant')
+        .document('${restaurant['nom']}')
+        .get()
+        .then((DocumentSnapshot) {
+      // print(DocumentSnapshot.data.toString());
+      result = DocumentSnapshot.data;
+      
+    });
+
+    return result;
+  }
 }
