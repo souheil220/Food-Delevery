@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/models/restaurant.dart';
 import 'package:hello_world/ui/home.dart';
 import 'package:hello_world/ui/restaurants_menu.dart';
 import 'ui/login_page.dart';

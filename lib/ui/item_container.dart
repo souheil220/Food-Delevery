@@ -19,7 +19,7 @@ class ItemContainer extends StatelessWidget {
             ),
           ),
         );
-       // print(getData().runtimeType);
+        // print(getData().runtimeType);
       },
       child: Items(
           imgUrl: restaurant['image'],
@@ -30,14 +30,15 @@ class ItemContainer extends StatelessWidget {
 
   Future<Map<String, dynamic>> getData() async {
     var result;
-   await Firestore.instance
+    await Firestore.instance
         .collection('restaurant')
         .document('${restaurant['nom']}')
         .get()
         .then((DocumentSnapshot) {
       // print(DocumentSnapshot.data.toString());
       result = DocumentSnapshot.data;
-      
+      //var name = result['Plat']['']['nom'];
+      print(result['Plat'].keys);
     });
 
     return result;
