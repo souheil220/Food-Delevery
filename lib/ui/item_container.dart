@@ -19,7 +19,6 @@ class ItemContainer extends StatelessWidget {
             ),
           ),
         );
-        // print(getData().runtimeType);
       },
       child: Items(
           imgUrl: restaurant['image'],
@@ -34,13 +33,13 @@ class ItemContainer extends StatelessWidget {
         .collection('restaurant')
         .document('${restaurant['nom']}')
         .get()
-        .then((DocumentSnapshot) {
+        .then((DocumentSnapshot snapshot) async {
       // print(DocumentSnapshot.data.toString());
-      result = DocumentSnapshot.data;
+       result = snapshot.data;
       //var name = result['Plat']['']['nom'];
-      print(result['Plat'].keys);
+      //print(result['Plat'].keys);
     });
-
+    print(result);
     return result;
   }
 }

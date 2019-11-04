@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/ui/list_of_food.dart';
+import 'package:hello_world/ui/food_show_case.dart';
+import 'custom_appbar.dart';
 
 class RestaurantsMenu extends StatefulWidget {
   var result;
@@ -13,7 +14,6 @@ class RestaurantsMenu extends StatefulWidget {
 class _RestaurantsMenuState extends State<RestaurantsMenu> {
   var result;
   var identifier = new Map();
- 
 
   @override
   void initState() {
@@ -22,17 +22,25 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
       result.then((rep) {
         identifier = rep;
         print(identifier);
-        
       });
     });
   }
 
+  havingthedata() async {}
   _RestaurantsMenuState(this.result);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: tab(identifier, identifier.keys.length),
-    );
+        body: SafeArea(
+      child: Container(
+        child: ListView(
+          children: <Widget>[
+            CustomAppBar(),
+            tab(identifier, identifier.keys.length),
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget tab(Map map, int longueur) {
@@ -78,7 +86,6 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
                                 child: Text(elem),
                               ),
                           ],
-                         
                         ),
                       ],
                     ),
@@ -88,10 +95,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
             ),
             body: TabBarView(
               children: <Widget>[
-               
-               
-                for (var tabu in map.keys)
-                  foodShowCase(identifier, tabu),
+                for (var tabu in map.keys) FoodShowCase(map: identifier,tabofnow: tabu,),
               ],
             ),
           ),
@@ -100,20 +104,4 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     );
   }
 
-  Widget foodShowCase(Map map, String tabofnow) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 30),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            
-           for (var element in map[tabofnow].keys)
-              ListOfFood(
-                nom: map[tabofnow][element]['nom'],
-                image: map[tabofnow][element]['image'],
-                prix: map[tabofnow][element]['prix'],
-              )
-          ],
-        ));
-  }
 }
