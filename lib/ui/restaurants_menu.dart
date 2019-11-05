@@ -21,12 +21,11 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     setState(() {
       result.then((rep) {
         identifier = rep;
-        print(identifier);
+       // print(identifier);
       });
     });
   }
 
-  havingthedata() async {}
   _RestaurantsMenuState(this.result);
   @override
   Widget build(BuildContext context) {

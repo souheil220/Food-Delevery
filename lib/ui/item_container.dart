@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_world/ui/restaurants_menu.dart';
-import 'items.dart';
+import 'restaurant.dart';
 
 class ItemContainer extends StatelessWidget {
   final databaseReference = Firestore();
@@ -20,7 +20,7 @@ class ItemContainer extends StatelessWidget {
           ),
         );
       },
-      child: Items(
+      child: Restauurant(
           imgUrl: restaurant['image'],
           name: restaurant['nom'],
           leftAligned: (restaurant['id'] % 2 == 0) ? true : false),
@@ -39,7 +39,7 @@ class ItemContainer extends StatelessWidget {
       //var name = result['Plat']['']['nom'];
       //print(result['Plat'].keys);
     });
-    print(result);
+   // print(result);
     return result;
   }
 }

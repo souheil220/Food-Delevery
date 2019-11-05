@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Items extends StatelessWidget {
+class Restauurant extends StatelessWidget {
   final bool leftAligned;
   final String imgUrl;
   final String name;
-  Items({
+  Restauurant({
     @required this.imgUrl,
     @required this.name,
     @required this.leftAligned,

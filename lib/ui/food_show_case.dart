@@ -30,6 +30,7 @@ class FoodShowCase extends StatelessWidget {
                 prix: map[tabofnow][element]['prix'],
                 adding: () {
                   listOfFood = ListOfFood(
+                    id: map[tabofnow][element]['id'],
                     nom: map[tabofnow][element]['nom'],
                     image: map[tabofnow][element]['image'],
                     prix: map[tabofnow][element]['prix'],
@@ -37,11 +38,11 @@ class FoodShowCase extends StatelessWidget {
 
                   addToCart(listOfFood);
                   final snackbar = SnackBar(
-                    content: Text('${listOfFood.prix} added to Cart'),
+                    content: Text('${listOfFood.nom} added to Cart'),
                     duration: Duration(milliseconds: 550),
                   );
                   Scaffold.of(context).showSnackBar(snackbar);
-                  print(map[tabofnow][element]['nom'].runtimeType);
+                 // print(map[tabofnow][element]['nom'].runtimeType);
                 },
               ),
             ),
