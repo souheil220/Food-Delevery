@@ -31,7 +31,12 @@ class CartProvider {
       listOfFood.decremantQuantity();
 
   List<ListOfFood> removeFromList(ListOfFood listOfFood) {
-    listOfFoods.remove(listOfFood);
+    if (listOfFood.quantity > 1) {
+      decreaseItemQuantity(listOfFood);
+    } else {
+      listOfFoods.remove(listOfFood);
+    }
+
     return listOfFoods;
   }
 }

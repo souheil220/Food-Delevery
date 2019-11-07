@@ -1,9 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/bloc/cartListBloc.dart';
-import 'package:hello_world/ui/home.dart';
-import 'package:hello_world/ui/restaurants_menu.dart';
+import 'bloc/cartListBloc.dart';
+import 'ui/home.dart';
+import 'ui/restaurants_menu.dart';
 import 'ui/login_page.dart';
+import 'bloc/listTileColorBloc.dart';
 
 void main() => runApp(new MyApp());
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       blocs: [
         Bloc((i) => CartListBloc()),
+        Bloc((i) => ColorBloc()),
       ],
       child: new MaterialApp(
         title: 'TheGorgeousLogin',

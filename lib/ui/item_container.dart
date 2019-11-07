@@ -5,12 +5,15 @@ import 'restaurant.dart';
 
 class ItemContainer extends StatelessWidget {
   final databaseReference = Firestore();
+  static var name;
   var restaurant;
   ItemContainer({this.restaurant});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        name = restaurant['id'];
+        print(name);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -34,12 +37,8 @@ class ItemContainer extends StatelessWidget {
         .document('${restaurant['nom']}')
         .get()
         .then((DocumentSnapshot snapshot) async {
-      // print(DocumentSnapshot.data.toString());
-       result = snapshot.data;
-      //var name = result['Plat']['']['nom'];
-      //print(result['Plat'].keys);
+      result = snapshot.data;
     });
-   // print(result);
     return result;
   }
 }

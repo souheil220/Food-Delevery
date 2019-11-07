@@ -15,15 +15,17 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
   var result;
   var identifier = new Map();
 
+  Future getData() async {
+    await result.then((rep) {
+      identifier = rep;
+      // print(identifier);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    setState(() {
-      result.then((rep) {
-        identifier = rep;
-       // print(identifier);
-      });
-    });
+    getData();
   }
 
   _RestaurantsMenuState(this.result);
@@ -94,7 +96,11 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
             ),
             body: TabBarView(
               children: <Widget>[
-                for (var tabu in map.keys) FoodShowCase(map: identifier,tabofnow: tabu,),
+                for (var tabu in map.keys)
+                  FoodShowCase(
+                    map: identifier,
+                    tabofnow: tabu,
+                  ),
               ],
             ),
           ),
@@ -102,5 +108,4 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
       ),
     );
   }
-
 }
