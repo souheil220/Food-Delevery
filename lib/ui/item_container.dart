@@ -12,15 +12,14 @@ class ItemContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        
         name = restaurant['id'];
         print(name);
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => RestaurantsMenu(
+          MaterialPageRoute(builder: (BuildContext context) => RestaurantsMenu (
               result: getData(),
-            ),
-          ),
+            )),
         );
       },
       child: Restauurant(

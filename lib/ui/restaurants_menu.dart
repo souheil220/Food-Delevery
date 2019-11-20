@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/food_show_case.dart';
 import 'custom_appbar.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:hello_world/ui/item_container.dart';
 
 class RestaurantsMenu extends StatefulWidget {
   var result;
+  static double deleveryPrice ;
+ 
 
   RestaurantsMenu({this.result});
 
@@ -12,19 +17,64 @@ class RestaurantsMenu extends StatefulWidget {
 }
 
 class _RestaurantsMenuState extends State<RestaurantsMenu> {
+   bool _loaded = false;
+  
   var result;
   var identifier = new Map();
 
   Future getData() async {
     await result.then((rep) {
       identifier = rep;
-      // print(identifier);
+      setState(() {
+        _loaded = true;
+      });
     });
+  }
+
+  var name = int.parse(ItemContainer.name.toString());
+  var long1;
+  var lat1;
+  var long2;
+  var lat2;
+  var _data;
+  final databaseReference = FirebaseDatabase.instance.reference();
+  double dist;
+  Future getPosition() async {
+    await databaseReference.once().then((DataSnapshot snapshot) {
+      _data = snapshot.value[name];
+      lat1 = _data["Lat"];
+      long1 = _data["Long"];
+    });
+    await getLocation().then((rep) {
+      lat2 = rep.latitude;
+      long2 = rep.longitude;
+    });
+
+    await getDistance(lat1, long1, lat2, long2).then((rep) {
+      print(rep);
+      dist = rep;
+    });
+    setState(() {
+      RestaurantsMenu.deleveryPrice = dist * 0.005;
+    });
+  }
+
+  Future getDistance(plac1Lat, place1long, plac2Lat, place2long) async {
+    double distanceInMeters = await Geolocator()
+        .distanceBetween(plac1Lat, place1long, plac2Lat, place2long);
+    return distanceInMeters;
+  }
+
+  Future getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return (position);
   }
 
   @override
   void initState() {
     super.initState();
+    getPosition();
     getData();
   }
 
@@ -37,7 +87,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
         child: ListView(
           children: <Widget>[
             CustomAppBar(),
-            tab(identifier, identifier.keys.length),
+            _loaded ? tab(identifier, identifier.keys.length): CircularProgressIndicator(),
           ],
         ),
       ),

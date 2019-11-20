@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/cart_body.dart';
 import 'package:hello_world/ui/list_of_food.dart';
+import 'package:hello_world/ui/restaurants_menu.dart';
 
-class BottomBar extends StatelessWidget {
+class BottomBar extends StatefulWidget {
   final List<ListOfFood> listOfFoods;
-  var totalamount = CartBody.totalAmount;
-  
+
   BottomBar(this.listOfFoods);
+
+  @override
+  _BottomBarState createState() => _BottomBarState();
+}
+
+class _BottomBarState extends State<BottomBar> {
+  RestaurantsMenu restau = RestaurantsMenu();
+  var totalamount = CartBody.totalAmount;
+  var totalamount2 = RestaurantsMenu.deleveryPrice;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +24,7 @@ class BottomBar extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          totalAmount(listOfFoods),
+          totalAmount(widget.listOfFoods),
           Divider(
             height: 1,
           ),
@@ -58,7 +68,7 @@ class BottomBar extends StatelessWidget {
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
           ),
           Text(
-            "DA ${returnTotalAmount(listOfFoods)}",
+            "DA ${widget.listOfFoods.length > 0 ?returnTotalAmount(widget.listOfFoods):0}",
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 28,
@@ -70,7 +80,7 @@ class BottomBar extends StatelessWidget {
   }
 
   String returnTotalAmount(List<ListOfFood> listOfFoods) {
-    double totalAmount = totalamount;
+    double totalAmount = totalamount2;
     for (int i = 0; i < listOfFoods.length; i++) {
       totalAmount = totalAmount + listOfFoods[i].prix * listOfFoods[i].quantity;
     }
