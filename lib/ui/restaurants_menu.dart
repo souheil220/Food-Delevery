@@ -7,8 +7,8 @@ import 'package:hello_world/ui/item_container.dart';
 
 class RestaurantsMenu extends StatefulWidget {
   var result;
-  static double deleveryPrice ;
- 
+  static double deleveryPrice;
+  static var location;
 
   RestaurantsMenu({this.result});
 
@@ -17,8 +17,8 @@ class RestaurantsMenu extends StatefulWidget {
 }
 
 class _RestaurantsMenuState extends State<RestaurantsMenu> {
-   bool _loaded = false;
-  
+  bool _loaded = false;
+
   var result;
   var identifier = new Map();
 
@@ -76,6 +76,10 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     super.initState();
     getPosition();
     getData();
+    setState(() {
+       RestaurantsMenu.location = getLocation();
+    });
+   
   }
 
   _RestaurantsMenuState(this.result);
@@ -87,7 +91,9 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
         child: ListView(
           children: <Widget>[
             CustomAppBar(),
-            _loaded ? tab(identifier, identifier.keys.length): CircularProgressIndicator(),
+            _loaded
+                ? tab(identifier, identifier.keys.length)
+                : CircularProgressIndicator(),
           ],
         ),
       ),

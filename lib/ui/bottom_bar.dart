@@ -1,6 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:hello_world/services/database.dart';
 import 'package:hello_world/ui/cart_body.dart';
 import 'package:hello_world/ui/list_of_food.dart';
+import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/restaurants_menu.dart';
 
 class BottomBar extends StatefulWidget {
@@ -13,10 +17,11 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  var location;
   RestaurantsMenu restau = RestaurantsMenu();
   var totalamount = CartBody.totalAmount;
   var totalamount2 = RestaurantsMenu.deleveryPrice;
-
+  @override
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,13 +49,27 @@ class _BottomBarState extends State<BottomBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Passer la Commande !",
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              fontSize: 16,
-            ),
-          )
+          FlatButton(
+              child: Text(
+                "Passer la Commande !",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              onPressed: () async {
+                var listoffood = widget.listOfFoods;
+
+                try {
+                  location = await getLocation();
+                   DatabaseService(uid: '1')
+                      .orderData(listoffood, location,returnTotalAmount(widget.listOfFoods));
+
+                  Navigator.pushNamed(context, OrderList.id);
+                } catch (e) {
+                  print(e);
+                }
+              }),
         ],
       ),
     );
@@ -68,7 +87,7 @@ class _BottomBarState extends State<BottomBar> {
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
           ),
           Text(
-            "DA ${widget.listOfFoods.length > 0 ?returnTotalAmount(widget.listOfFoods):0}",
+            "DA ${widget.listOfFoods.length > 0 ? returnTotalAmount(widget.listOfFoods) : 0}",
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 28,
@@ -81,9 +100,19 @@ class _BottomBarState extends State<BottomBar> {
 
   String returnTotalAmount(List<ListOfFood> listOfFoods) {
     double totalAmount = totalamount2;
-    for (int i = 0; i < listOfFoods.length; i++) {
+    setState(() {
+       for (int i = 0; i < listOfFoods.length; i++) {
       totalAmount = totalAmount + listOfFoods[i].prix * listOfFoods[i].quantity;
     }
+    });
+   
     return totalAmount.toStringAsFixed(0);
+  }
+
+  Future getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+    return (position);
   }
 }
