@@ -21,7 +21,7 @@ class _BrewListState extends State<BrewList> {
           Text('no order made')
         else
           for (var order in orders.documents)
-               MyCard(order.data),
+               MyCard(order.data,order.documentID),
       ],
     );
   }

@@ -1,83 +1,92 @@
 import 'package:flutter/material.dart';
-import 'my_orders.dart';
-import 'my_location.dart';
+import '../services/database.dart';
+import 'package:hello_world/ui/order_information_conf.dart';
 
 class MyCard extends StatelessWidget {
   var order;
+  var orderId;
 
-  MyCard(this.order);
+  MyCard(this.order, this.orderId);
 
   @override
   Widget build(BuildContext context) {
-    //RegExp re = new RegExp(r'[0-9]');
-
-   // print(order);
+    print(order);
     return Container(
-      child: coolOrders(order, MyOrders(order),
-          Text('Total : ${order['Total']}'), MyLocation()),
-      /*decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 20.0, // has the effect of softening the shadow
-            spreadRadius: 5.0, // has the effect of extending the shadow
-            offset: Offset(
-              10.0, // horizontal, move right 10
-              10.0, // vertical, move down 10
-            ),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Hero(
+            tag: (order['id']).toString(),
+            child: test(context, (order['photo']), Text(order['name']),
+                Text('Bénéfice : ${order['Total']}')),
+          )
+          //SizedBox(height: 10,)
+        ],
+      ),
+    );
+  }
+
+  Widget test(
+    BuildContext context,
+    String image,
+    Text text,
+    Text text1,
+  ) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: 90.0,
+                height: 90.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(image),
+                    //image: image,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 72.0, right: 24.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: new BorderRadius.circular(8.0),
+                  color: Color(0xFF8685E5),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    text,
+                    text1,
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FlatButton(
+                child: Icon(Icons.check),
+                textColor: Colors.green,
+                onPressed: () {
+                  DatabaseService(uid: '1').deleteData(order['id']);
+                  DatabaseService(uid: '1').orderTaken(order['id']);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          OrderInformationConf(order, order['id']),
+                    ),
+                  );
+                },
+              ),
+            ],
           )
         ],
       ),
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          for (var ordre in (order.data.keys))
-            if ((ordre.toString()) == 'order 0' ||
-                (ordre.toString()) == 'order 1' )
-              MyOrders(order.data[ordre.toString()])
-            else if ((ordre.toString()) == 'Etat')
-              Text(ordre + ":" + order.data[ordre].toString())
-            else if ((ordre.toString()) == 'Total')
-              Text(ordre + ":" + order.data[ordre].toString())
-            else
-              MyLocation(order.data[ordre.toString()]),
-        ],
-      ),*/
     );
-  }
-
-  Widget coolOrders(var order, Widget myorder, Text total, Widget location) {
-    //String str1 = "order";
-
-//Match str1Match = re.matchAsPrefix(str1);
-    return Column(
-      children: <Widget>[
-        myorder,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            total,
-            SizedBox(
-              width: 20,
-            ),
-            location
-          ],
-        )
-      ],
-    );
-  }
-
-  String theKey(var order) {
-    String thekey;
-    RegExp re = new RegExp(r'order');
-    for (var ordre in order.keys)
-      if ((re.matchAsPrefix(ordre)) != null) {
-        thekey = ordre.toString();
-      }
-    
-
-    return thekey;
   }
 }

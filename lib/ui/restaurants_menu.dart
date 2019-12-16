@@ -31,7 +31,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     });
   }
 
-  var name = int.parse(ItemContainer.name.toString());
+  var id = int.parse(ItemContainer.idr.toString());
   var long1;
   var lat1;
   var long2;
@@ -41,7 +41,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
   double dist;
   Future getPosition() async {
     await databaseReference.once().then((DataSnapshot snapshot) {
-      _data = snapshot.value[name];
+      _data = snapshot.value[id];
       lat1 = _data["Lat"];
       long1 = _data["Long"];
     });

@@ -1,8 +1,8 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hello_world/services/database.dart';
 import 'package:hello_world/ui/cart_body.dart';
+import 'package:hello_world/ui/item_container.dart';
 import 'package:hello_world/ui/list_of_food.dart';
 import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/restaurants_menu.dart';
@@ -17,6 +17,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  var id;
   var location;
   RestaurantsMenu restau = RestaurantsMenu();
   var totalamount = CartBody.totalAmount;
@@ -41,8 +42,9 @@ class _BottomBarState extends State<BottomBar> {
 
   Container nextButtonBar() {
     return Container(
+      height: 60.0,
       margin: EdgeInsets.only(right: 25),
-      padding: EdgeInsets.all(25),
+      padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Color(0xfffeb324),
       ),
@@ -62,10 +64,26 @@ class _BottomBarState extends State<BottomBar> {
 
                 try {
                   location = await getLocation();
-                   DatabaseService(uid: '1')
-                      .orderData(listoffood, location,returnTotalAmount(widget.listOfFoods));
-
-                  Navigator.pushNamed(context, OrderList.id);
+                  var value = await DatabaseService(uid: '1').orderData(
+                      ItemContainer.nom,
+                      ItemContainer.photo,
+                      listoffood,
+                      location,
+                      returnBenifice(widget.listOfFoods));
+                  
+                    setState(() {
+                      id = value;
+                    });
+                   
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => OrderList(
+                          returnTotalAmount(widget.listOfFoods),
+                          widget.listOfFoods,id),
+                    ),
+                  );
                 } catch (e) {
                   print(e);
                 }
@@ -99,14 +117,23 @@ class _BottomBarState extends State<BottomBar> {
   }
 
   String returnTotalAmount(List<ListOfFood> listOfFoods) {
-    double totalAmount = totalamount2;
-    setState(() {
-       for (int i = 0; i < listOfFoods.length; i++) {
-      totalAmount = totalAmount + listOfFoods[i].prix * listOfFoods[i].quantity;
+    totalamount = totalamount2;
+
+    for (int i = 0; i < listOfFoods.length; i++) {
+      totalamount = totalamount + listOfFoods[i].prix * listOfFoods[i].quantity;
     }
+
+    return totalamount.toStringAsFixed(0);
+  }
+
+  String returnBenifice(List<ListOfFood> listOfFoods) {
+    double benefice = 0;
+    setState(() {
+      for (int i = 0; i < listOfFoods.length; i++) {
+        benefice = benefice + listOfFoods[i].prix * listOfFoods[i].quantity;
+      }
     });
-   
-    return totalAmount.toStringAsFixed(0);
+    return (totalamount - benefice).toStringAsFixed(0);
   }
 
   Future getLocation() async {

@@ -10,6 +10,7 @@ import 'ui/home.dart';
 import 'ui/restaurants_menu.dart';
 import 'ui/login_page.dart';
 import 'bloc/listTileColorBloc.dart';
+import 'ui/order_information_conf.dart';
 
 void main() => runApp(new MyApp());
 
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: PageViewWidget.id,
         routes: {
-          OrderList.id:(context) =>OrderList(), 
+          'Order-List':(context) =>OrderList(page,page,page), 
+         '/order-after-conf':(context) =>OrderInformationConf(page,page), 
           LoginRegisterUser.id: (context) => LoginRegisterUser(),
           LoginRegisterDelev.id: (context) => LoginRegisterDelev(),
           PageViewWidget.id: (context) => PageViewWidget(),

@@ -5,7 +5,9 @@ import 'restaurant.dart';
 
 class ItemContainer extends StatelessWidget {
   final databaseReference = Firestore();
-  static var name;
+  static var idr;
+  static var nom;
+  static var photo;
   var restaurant;
   ItemContainer({this.restaurant});
   @override
@@ -13,8 +15,10 @@ class ItemContainer extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         
-        name = restaurant['id'];
-        print(name);
+        idr = restaurant['id'];
+        nom = restaurant['nom'];
+        photo = restaurant['image'];
+        print(idr);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (BuildContext context) => RestaurantsMenu (

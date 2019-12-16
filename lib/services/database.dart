@@ -7,6 +7,9 @@ class DatabaseService {
       Firestore.instance.collection('users');
   final CollectionReference orderCollection =
       Firestore.instance.collection('orders');
+  final CollectionReference orderTakenCollection =
+      Firestore.instance.collection('orders Taken');
+  final databaseReference = Firestore.instance;
 
   Future updateUserData(String name, String typeOfUser) async {
     return await userCollection.document(uid).setData({
@@ -15,25 +18,63 @@ class DatabaseService {
     });
   }
 
-  Future orderData(var listoffood, var location, var totalAmount) async {
-    return await orderCollection.document().setData({
-      for (int i = 0; i < listoffood.length; i++)
-        'order $i': {
-          'nom': listoffood[i].nom,
-          'quantite': listoffood[i].quantity,
-          'image': listoffood[i].image,
+  getEtat(var id) {
+    return orderTakenCollection.document(id.toString()).snapshots();
+  }
+
+  Future orderData(var namer, var photor, var listoffood, var location,
+      var totalAmount) async {
+    var id = orderCollection.document().documentID;
+    await orderCollection
+        .document(orderCollection.document(id).documentID)
+        .setData(
+      {
+        for (int i = 0; i < listoffood.length; i++)
+          'order $i': {
+            'nom': listoffood[i].nom,
+            'quantite': listoffood[i].quantity,
+            'image': listoffood[i].image,
+          },
+        'location': {
+          'Latitude': location.latitude,
+          'Longitude': location.longitude,
         },
-      'location': {
-        'Latitude': location.latitude,
-        'Longitude': location.longitude,
+        'Total': totalAmount,
+        'Etat': 'waiting',
+        'name': namer,
+        'photo': photor,
+        'id': id,
       },
-      'Total': totalAmount,
-      'Etat': 'waiting',
-    });
+    );
+
+    return id;
+  }
+
+//creat collection of order taken
+  Future orderTaken(var id) async {
+    await orderTakenCollection
+        .document(orderTakenCollection.document(id).documentID)
+        .setData(
+      {
+        'id': id,
+        'Etat': "Pris en charge",
+      },
+    );
+
+    return id;
   }
 
   //get orders stream
   Stream<QuerySnapshot> get orders {
     return orderCollection.snapshots();
+  }
+
+//delete document
+  void deleteData(var id) {
+    try {
+      databaseReference.collection('orders').document(id).delete();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

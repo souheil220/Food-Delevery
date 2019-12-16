@@ -11,33 +11,42 @@ class ItemContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Image.network(
-            listOfFood.image,
-            fit: BoxFit.fitHeight,
-            height: 55,
-            width: 80,
+        Padding(
+          padding: EdgeInsets.only(right: 5.0),
+          child: ClipRRect(
+            
+            borderRadius: BorderRadius.circular(5),
+            child: Image.network(
+              listOfFood.image,
+              fit: BoxFit.fitHeight,
+              height: 55,
+              width: 80,
+            ),
           ),
         ),
-        RichText(
-          text: TextSpan(
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-              children: [
-                TextSpan(text: listOfFood.quantity.toString()),
-                TextSpan(text: " x "),
-                TextSpan(text: listOfFood.nom),
-              ]),
+        Flexible(
+                  child: RichText(
+            text: TextSpan(
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
+                children: [
+                  TextSpan(text: listOfFood.quantity.toString()),
+                  TextSpan(text: " x "),
+                  TextSpan(text: listOfFood.nom,),
+                ]),
+          ),
         ),
-        Text(
-          "DA ${listOfFood.quantity * listOfFood.prix}",
-          style: TextStyle(
-            color: Colors.blue[700],
-            fontWeight: FontWeight.w400,
+        Padding(
+          padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+          child: Text(
+            "DA ${listOfFood.quantity * listOfFood.prix}",
+            style: TextStyle(
+              color: Colors.blue[700],
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],
