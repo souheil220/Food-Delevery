@@ -1,6 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/delv_home.dart';
+import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/login_register_delev.dart';
 import 'package:hello_world/ui/login_register_user.dart';
 import 'package:hello_world/ui/order_list.dart';
@@ -25,19 +26,21 @@ class MyApp extends StatelessWidget {
         Bloc((i) => ColorBloc()),
       ],
       child: new MaterialApp(
-        title: 'TheGorgeousLogin',
+        title: 'Delevery Food',
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: PageViewWidget.id,
+           initialRoute: EmptyScaffold.id,
+       // initialRoute: PageViewWidget.id,
         routes: {
-          'Order-List':(context) =>OrderList(page,page,page), 
-         '/order-after-conf':(context) =>OrderInformationConf(page,page), 
+          'Order-List': (context) => OrderList(page, page, page),
+          '/order-after-conf': (context) => OrderInformationConf(page, page),
           LoginRegisterUser.id: (context) => LoginRegisterUser(),
+          EmptyScaffold.id: (context) => EmptyScaffold(),
           LoginRegisterDelev.id: (context) => LoginRegisterDelev(),
           PageViewWidget.id: (context) => PageViewWidget(),
           DeleveryHomePage.id: (context) => DeleveryHomePage(),
-          LoginPage.id: (context) => LoginPage(page,typeOfUser),
+          LoginPage.id: (context) => LoginPage(page, typeOfUser, page, page),
           Home.id: (context) => Home(),
           '/restaurant-menu': (context) => RestaurantsMenu(),
         },

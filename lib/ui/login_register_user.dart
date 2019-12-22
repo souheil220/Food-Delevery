@@ -7,10 +7,13 @@ class LoginRegisterUser extends StatelessWidget {
   static const String id = 'Login-Register-user';
   const LoginRegisterUser({Key key}) : super(key: key);
 
+   static const Color loginGradientStart = const Color(0xFFfbab61);
+  static const Color loginGradientEnd = const Color(0xFFf7418c);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: LoginPage(Home.id,'Consumer'),
+      child: LoginPage(Home.id,'Consumer',loginGradientStart,loginGradientEnd),
     );
   }
 }

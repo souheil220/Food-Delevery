@@ -61,7 +61,7 @@ class _BottomBarState extends State<BottomBar> {
               ),
               onPressed: () async {
                 var listoffood = widget.listOfFoods;
-
+             //   print(listoffood);
                 try {
                   location = await getLocation();
                   var value = await DatabaseService(uid: '1').orderData(
@@ -70,18 +70,18 @@ class _BottomBarState extends State<BottomBar> {
                       listoffood,
                       location,
                       returnBenifice(widget.listOfFoods));
-                  
-                    setState(() {
-                      id = value;
-                    });
-                   
-                  
+
+                  setState(() {
+                    id = value;
+                  });
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => OrderList(
                           returnTotalAmount(widget.listOfFoods),
-                          widget.listOfFoods,id),
+                          widget.listOfFoods,
+                          id),
                     ),
                   );
                 } catch (e) {
@@ -139,7 +139,7 @@ class _BottomBarState extends State<BottomBar> {
   Future getLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position);
+   // print(position);
     return (position);
   }
 }

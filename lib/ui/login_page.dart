@@ -1,16 +1,30 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../style/theme.dart' as Theme;
+import 'package:hello_world/services/database.dart';
+import 'package:hello_world/services/memory_storage.dart';
+//import '../style/theme.dart' as Theme;
 import '../utils/bubble_indication_painter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../services/auth.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'empty_scaffild.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'Login-Page';
   final page;
   final String typeOfUser;
-  LoginPage(this.page,this.typeOfUser);
+  final Color loginGradientStart;
+  Color loginGradientEnd;
+  LoginPage(
+    this.page,
+    this.typeOfUser,
+    this.loginGradientStart,
+    this.loginGradientEnd,
+  );
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -18,6 +32,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+  File jsonFile;
+  Directory dir;
+  String fileName = "myJSONFile.json";
+  bool fileExists = false;
+  Map<String, String> fileContent;
+
   final AuthService _auth = AuthService();
   String _email;
   String _password;
@@ -68,8 +88,10 @@ class _LoginPageState extends State<LoginPage>
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    Theme.Colors.loginGradientStart,
-                    Theme.Colors.loginGradientEnd
+                    /*  Theme.Colors.loginGradientStart,
+                    Theme.Colors.loginGradientEnd*/
+                    widget.loginGradientStart,
+                    widget.loginGradientEnd
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 1.0),
@@ -140,6 +162,12 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+      if (fileExists) fileContent = jsonDecode(jsonFile.readAsStringSync());
+    });
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -317,20 +345,20 @@ class _LoginPageState extends State<LoginPage>
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Theme.Colors.loginGradientStart,
+                        color: widget.loginGradientStart,
                         offset: Offset(1.0, 6.0),
                         blurRadius: 20.0,
                       ),
                       BoxShadow(
-                        color: Theme.Colors.loginGradientEnd,
+                        color: widget.loginGradientEnd,
                         offset: Offset(1.0, 6.0),
                         blurRadius: 20.0,
                       ),
                     ],
                     gradient: new LinearGradient(
                         colors: [
-                          Theme.Colors.loginGradientEnd,
-                          Theme.Colors.loginGradientStart
+                          widget.loginGradientEnd,
+                          widget.loginGradientStart
                         ],
                         begin: const FractionalOffset(0.2, 0.2),
                         end: const FractionalOffset(1.0, 1.0),
@@ -339,7 +367,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   child: MaterialButton(
                       highlightColor: Colors.transparent,
-                      splashColor: Theme.Colors.loginGradientEnd,
+                      splashColor: widget.loginGradientEnd,
                       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -357,10 +385,15 @@ class _LoginPageState extends State<LoginPage>
                           showSpinner = true;
                         });
 
+                       MemoryStorage().writeToFile({"email": _email,'type':widget.typeOfUser},EmptyScaffold.dir,'myJSONFile.json',EmptyScaffold.jsonFile1,EmptyScaffold.existing);
                         final _result = await _auth.signInWithEmailAndPassword(
                             _email, _password);
+                        // print(data);
                         if (_result != null) {
-                          Navigator.pushNamed(context, widget.page);
+                          //   Navigator.pushNamed(context, widget.page);
+
+                          DatabaseService().verifyIfDelevrer(
+                              context, widget.typeOfUser, widget.page);
                         }
                         setState(() {
                           showSpinner = false;
@@ -663,20 +696,20 @@ class _LoginPageState extends State<LoginPage>
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Theme.Colors.loginGradientStart,
+                          color: widget.loginGradientStart,
                           offset: Offset(1.0, 6.0),
                           blurRadius: 20.0,
                         ),
                         BoxShadow(
-                          color: Theme.Colors.loginGradientEnd,
+                          color: widget.loginGradientEnd,
                           offset: Offset(1.0, 6.0),
                           blurRadius: 20.0,
                         ),
                       ],
                       gradient: new LinearGradient(
                           colors: [
-                            Theme.Colors.loginGradientEnd,
-                            Theme.Colors.loginGradientStart
+                            widget.loginGradientEnd,
+                            widget.loginGradientStart
                           ],
                           begin: const FractionalOffset(0.2, 0.2),
                           end: const FractionalOffset(1.0, 1.0),
@@ -685,7 +718,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                     child: MaterialButton(
                         highlightColor: Colors.transparent,
-                        splashColor: Theme.Colors.loginGradientEnd,
+                        splashColor: widget.loginGradientEnd,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -705,18 +738,19 @@ class _LoginPageState extends State<LoginPage>
 
                           if (_password == _confirmPassword) {
                             dynamic _result =
-                                _auth.registerWithEmailAndPassword(
-                              _email,
-                              _password,
-                              _name,
-                              widget.typeOfUser
-                            );
+                                await _auth.registerWithEmailAndPassword(_email,
+                                    _password, _name, widget.typeOfUser);
 
                             if (_result != null) {
                               setState(() {
                                 showSpinner = false;
                               });
+
                               Navigator.pushNamed(context, widget.page);
+                            } else {
+                              setState(() {
+                                showSpinner = false;
+                              });
                             }
                           } else {
                             setState(() {

@@ -51,7 +51,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     });
 
     await getDistance(lat1, long1, lat2, long2).then((rep) {
-      print(rep);
+    //  print(rep);
       dist = rep;
     });
     setState(() {

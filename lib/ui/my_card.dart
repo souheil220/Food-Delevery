@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/services/memory_storage.dart';
+import 'package:hello_world/ui/empty_scaffild.dart';
 import '../services/database.dart';
 import 'package:hello_world/ui/order_information_conf.dart';
 
-class MyCard extends StatelessWidget {
+class MyCard extends StatefulWidget {
   var order;
-  var orderId;
 
-  MyCard(this.order, this.orderId);
+  MyCard(this.order);
 
   @override
+  _MyCardState createState() => _MyCardState();
+}
+
+class _MyCardState extends State<MyCard> {
+  @override
   Widget build(BuildContext context) {
-    print(order);
+    //print(order);
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
           Hero(
-            tag: (order['id']).toString(),
-            child: test(context, (order['photo']), Text(order['name']),
-                Text('Bénéfice : ${order['Total']}')),
+            tag: (widget.order['id']).toString(),
+            child: test(
+                context,
+                (widget.order['photo']),
+                Text(widget.order['name']),
+                Text('Bénéfice : ${widget.order['Total']}')),
           )
           //SizedBox(height: 10,)
         ],
@@ -72,13 +81,16 @@ class MyCard extends StatelessWidget {
                 child: Icon(Icons.check),
                 textColor: Colors.green,
                 onPressed: () {
-                  DatabaseService(uid: '1').deleteData(order['id']);
-                  DatabaseService(uid: '1').orderTaken(order['id']);
+                  MemoryStorage().writeToFile({'order':widget.order},EmptyScaffold.dir,'myJSONFile.json',EmptyScaffold.jsonFile1,EmptyScaffold.existing);
+
+                  DatabaseService(uid: '1').deleteData(widget.order['id']);
+                  DatabaseService(uid: '1').orderTaken(widget.order['id']);
+
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          OrderInformationConf(order, order['id']),
+                      builder: (BuildContext context) => OrderInformationConf(
+                          widget.order, widget.order['id']),
                     ),
                   );
                 },

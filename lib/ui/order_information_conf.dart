@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 import 'my_location.dart';
 import 'my_orders.dart';
 
-class OrderInformationConf extends StatelessWidget {
+class OrderInformationConf extends StatefulWidget {
   static const id = 'order-Info-after-confirm';
   var order;
   var orid;
   OrderInformationConf(this.order, this.orid);
+
+  @override
+  _OrderInformationConfState createState() => _OrderInformationConfState();
+}
+
+class _OrderInformationConfState extends State<OrderInformationConf> {
+ 
   @override
   Widget build(BuildContext context) {
-    print(orid);
     return Scaffold(
       appBar: AppBar(
         title: Text('Information'),
@@ -22,14 +28,14 @@ class OrderInformationConf extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 69),
-                child: coolOrders(order, MyOrders(order),
-                    Text('Bénéfice : ${order['Total']}'), MyLocation()),
+                child: coolOrders(widget.order, MyOrders(widget.order),
+                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation()),
               ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
                   child: Hero(
-                    tag: orid.toString(),
+                    tag: widget.orid.toString(),
                     child: Container(
                       alignment: new FractionalOffset(0.0, 0.5),
                       width: 90.0,
@@ -39,7 +45,7 @@ class OrderInformationConf extends StatelessWidget {
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                            order['photo'],
+                            widget.order['photo'],
                           ),
                         ),
                       ),

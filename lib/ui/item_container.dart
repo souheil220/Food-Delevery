@@ -18,7 +18,6 @@ class ItemContainer extends StatelessWidget {
         idr = restaurant['id'];
         nom = restaurant['nom'];
         photo = restaurant['image'];
-        print(idr);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (BuildContext context) => RestaurantsMenu (
