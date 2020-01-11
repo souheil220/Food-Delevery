@@ -29,6 +29,9 @@ class CartProvider {
       listOfFood.incremantQuantity();
   void decreaseItemQuantity(ListOfFood listOfFood) =>
       listOfFood.decremantQuantity();
+  List<ListOfFood> emptyList(List<ListOfFood> listOfFood) {
+   return  listOfFoods = [];
+  }
 
   List<ListOfFood> removeFromList(ListOfFood listOfFood) {
     if (listOfFood.quantity > 1) {

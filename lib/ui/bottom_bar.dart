@@ -1,15 +1,22 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:hello_world/services/database.dart';
-import 'package:hello_world/ui/cart_body.dart';
-import 'package:hello_world/ui/item_container.dart';
-import 'package:hello_world/ui/list_of_food.dart';
-import 'package:hello_world/ui/order_list.dart';
-import 'package:hello_world/ui/restaurants_menu.dart';
+import 'package:hello_world/models/my_food.dart';
+import '../bloc/cartListBloc.dart';
+import '../models/list_of_command.dart';
+import '../services/currentLocation.dart';
+import '../models/commande.dart';
+import '../services/database.dart';
+import '../services/memory_storage.dart';
+import 'cart_body.dart';
+import 'empty_scaffild.dart';
+import 'item_container.dart';
+import 'list_of_food.dart';
+import 'order_list.dart';
+import 'restaurants_menu.dart';
 
 class BottomBar extends StatefulWidget {
-  final List<ListOfFood> listOfFoods;
-
+  List<ListOfFood> listOfFoods;
+  ListOfCommand _listOfCommand = ListOfCommand();
   BottomBar(this.listOfFoods);
 
   @override
@@ -17,6 +24,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  final CartListBloc bloc = BlocProvider.getBloc<CartListBloc>();
   var id;
   var location;
   RestaurantsMenu restau = RestaurantsMenu();
@@ -61,9 +69,9 @@ class _BottomBarState extends State<BottomBar> {
               ),
               onPressed: () async {
                 var listoffood = widget.listOfFoods;
-             //   print(listoffood);
+                //   print(listoffood);
                 try {
-                  location = await getLocation();
+                  location = await getCurrentLocation;
                   var value = await DatabaseService(uid: '1').orderData(
                       ItemContainer.nom,
                       ItemContainer.photo,
@@ -71,17 +79,54 @@ class _BottomBarState extends State<BottomBar> {
                       location,
                       returnBenifice(widget.listOfFoods));
 
+                  var map0 = {};
+                  List _list3 = [];
+                  ListOfCommand listOfCommand;
+                  listOfCommand = ListOfCommand(
+                      amount: returnTotalAmount(widget.listOfFoods),
+                      listOfFoods: widget.listOfFoods,
+                      ido: id);
+                  _list3 = widget._listOfCommand.addCommade(listOfCommand);
+                  bloc.emptyAllList(widget.listOfFoods);
+
                   setState(() {
                     id = value;
+
+                    List list0 = [];
+                    List list1 = [];
+
+                    //start of order
+                    int j = 0;
+                    for (var i in _list3) {
+                      print(i.runtimeType);
+                      list0.add(MyFood(i, "order $j"));
+                      list1.add(i);
+                      j++;
+                    }
+
+                    int i = 0;
+                    print(list1[0].runtimeType);
+                    list0.forEach((customer) {
+                      map0[customer.commande] = ordrDetail(list1[i]);
+                      i++;
+                    });
                   });
 
-                  Navigator.push(
+                  print(map0);
+                  MemoryStorage().writeToFile({
+                    'My Food': map0,
+                    'id': id,
+                    'totalamount': totalamount,
+                    'totalamount2': totalamount2,
+                    'nomR': ItemContainer.nom,
+                    'photoR': ItemContainer.photo
+                  }, EmptyScaffold.dir, 'myJSONFile.json',
+                      EmptyScaffold.jsonFile1, EmptyScaffold.existing);
+
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => OrderList(
-                          returnTotalAmount(widget.listOfFoods),
-                          widget.listOfFoods,
-                          id),
+                      builder: (BuildContext context) => OrderList(_list3),
                     ),
                   );
                 } catch (e) {
@@ -136,10 +181,36 @@ class _BottomBarState extends State<BottomBar> {
     return (totalamount - benefice).toStringAsFixed(0);
   }
 
-  Future getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-   // print(position);
-    return (position);
+  var getCurrentLocation = CurrentLocation().getLocation();
+
+  Map<dynamic, dynamic> newMap(var list) {
+    var map1 = {};
+    map1 = {
+      'id': list.id,
+      'nom': list.nom,
+      'image': list.image,
+      'prix': list.prix,
+      'quantity': list.quantity,
+    };
+    return map1;
+  }
+
+  ordrDetail(ListOfCommand list) {
+    List list2 = [];
+    List list3 = [];
+    var map2 = {};
+
+    int j = 0;
+    for (var i in list.listOfFoods) {
+      list3.add(Commande(i, "commande $j"));
+      list2.add(i);
+      j++;
+    }
+    int i = 0;
+    list3.forEach((customer) {
+      map2[customer.commande] = newMap(list2[i]);
+      i++;
+    });
+    return map2;
   }
 }

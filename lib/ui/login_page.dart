@@ -384,7 +384,7 @@ class _LoginPageState extends State<LoginPage>
                         setState(() {
                           showSpinner = true;
                         });
-
+                  
                        MemoryStorage().writeToFile({"email": _email,'type':widget.typeOfUser},EmptyScaffold.dir,'myJSONFile.json',EmptyScaffold.jsonFile1,EmptyScaffold.existing);
                         final _result = await _auth.signInWithEmailAndPassword(
                             _email, _password);

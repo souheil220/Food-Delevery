@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/ui/bottum_navigation_bar.dart';
 import 'package:hello_world/ui/login_page.dart';
 import 'home.dart';
 //import 'login_page_delev.dart';
@@ -13,7 +14,7 @@ class LoginRegisterUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: LoginPage(Home.id,'Consumer',loginGradientStart,loginGradientEnd),
+      child: LoginPage(BottomNavigationBarre.id,'Consumer',loginGradientStart,loginGradientEnd),
     );
   }
 }

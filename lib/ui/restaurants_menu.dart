@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/food_show_case.dart';
+import 'bottum_navigation_bar.dart';
 import 'custom_appbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -51,7 +52,6 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     });
 
     await getDistance(lat1, long1, lat2, long2).then((rep) {
-    //  print(rep);
       dist = rep;
     });
     setState(() {
@@ -77,27 +77,27 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     getPosition();
     getData();
     setState(() {
-       RestaurantsMenu.location = getLocation();
+      RestaurantsMenu.location = getLocation();
     });
-   
   }
 
   _RestaurantsMenuState(this.result);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Container(
-        child: ListView(
-          children: <Widget>[
-            CustomAppBar(),
-            _loaded
-                ? tab(identifier, identifier.keys.length)
-                : CircularProgressIndicator(),
-          ],
+      body: SafeArea(
+        child: Container(
+          child: ListView(
+            children: <Widget>[
+              CustomAppBar(),
+              _loaded
+                  ? tab(identifier, identifier.keys.length)
+                  : CircularProgressIndicator(),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Widget tab(Map map, int longueur) {

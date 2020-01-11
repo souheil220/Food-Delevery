@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:hello_world/ui/bottum_navigation_bar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'item_container.dart';
 
@@ -33,6 +34,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child:ListView(

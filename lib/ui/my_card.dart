@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/memory_storage.dart';
+import 'package:hello_world/ui/brew_list.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import '../services/database.dart';
 import 'package:hello_world/ui/order_information_conf.dart';
@@ -81,7 +82,19 @@ class _MyCardState extends State<MyCard> {
                 child: Icon(Icons.check),
                 textColor: Colors.green,
                 onPressed: () {
-                  MemoryStorage().writeToFile({'order':widget.order},EmptyScaffold.dir,'myJSONFile.json',EmptyScaffold.jsonFile1,EmptyScaffold.existing);
+                  var located;
+
+                  BrewList.currentLocation.then((value) {
+                    setState(() {
+                       located = value;
+                    });
+                   
+                  });
+                  MemoryStorage().writeToFile({
+                    'order': widget.order,
+                    'myLocation':located
+                  }, EmptyScaffold.dir, 'myJSONFile.json',
+                      EmptyScaffold.jsonFile1, EmptyScaffold.existing);
 
                   DatabaseService(uid: '1').deleteData(widget.order['id']);
                   DatabaseService(uid: '1').orderTaken(widget.order['id']);
@@ -90,7 +103,9 @@ class _MyCardState extends State<MyCard> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => OrderInformationConf(
-                          widget.order, widget.order['id']),
+                          widget.order,
+                          widget.order['id'],
+                          BrewList.currentLocation),
                     ),
                   );
                 },

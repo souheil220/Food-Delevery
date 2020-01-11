@@ -7,14 +7,14 @@ class OrderInformationConf extends StatefulWidget {
   static const id = 'order-Info-after-confirm';
   var order;
   var orid;
-  OrderInformationConf(this.order, this.orid);
+  var myLocation;
+  OrderInformationConf(this.order, this.orid,this.myLocation);
 
   @override
   _OrderInformationConfState createState() => _OrderInformationConfState();
 }
 
 class _OrderInformationConfState extends State<OrderInformationConf> {
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
               Padding(
                 padding: const EdgeInsets.only(top: 69),
                 child: coolOrders(widget.order, MyOrders(widget.order),
-                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation()),
+                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation(widget.myLocation)),
               ),
               Align(
                 alignment: Alignment.topCenter,

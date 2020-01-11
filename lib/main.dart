@@ -1,13 +1,16 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/ui/bottum_navigation_bar.dart';
 import 'package:hello_world/ui/delv_home.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/login_register_delev.dart';
 import 'package:hello_world/ui/login_register_user.dart';
 import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/page_view_widget.dart';
+import 'package:hello_world/ui/profile.dart';
 import 'bloc/cartListBloc.dart';
 import 'ui/home.dart';
+import 'ui/my_map.dart';
 import 'ui/restaurants_menu.dart';
 import 'ui/login_page.dart';
 import 'bloc/listTileColorBloc.dart';
@@ -30,11 +33,13 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-           initialRoute: EmptyScaffold.id,
-       // initialRoute: PageViewWidget.id,
+        initialRoute: EmptyScaffold.id,
+        // initialRoute: PageViewWidget.id,
         routes: {
-          'Order-List': (context) => OrderList(page, page, page),
-          '/order-after-conf': (context) => OrderInformationConf(page, page),
+          Profile.id:(context) => Profile(),
+          MyMap.id:(context) => MyMap(page),
+          'Order-List': (context) => OrderList(page),
+          '/order-after-conf': (context) => OrderInformationConf(page, page,page),
           LoginRegisterUser.id: (context) => LoginRegisterUser(),
           EmptyScaffold.id: (context) => EmptyScaffold(),
           LoginRegisterDelev.id: (context) => LoginRegisterDelev(),
@@ -43,7 +48,9 @@ class MyApp extends StatelessWidget {
           LoginPage.id: (context) => LoginPage(page, typeOfUser, page, page),
           Home.id: (context) => Home(),
           '/restaurant-menu': (context) => RestaurantsMenu(),
+          BottomNavigationBarre.id: (context) => BottomNavigationBarre()
         },
+       
       ),
     );
   }

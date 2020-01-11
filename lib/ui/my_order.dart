@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/database.dart';
+import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/item_container.dart';
 import 'package:hello_world/ui/item_content.dart';
-
 
 class MyOrder extends StatefulWidget {
   var amount;
@@ -20,11 +20,7 @@ class MyOrder extends StatefulWidget {
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w300,
       fontSize: 14.0);
-  static const TextStyle planetDistance = const TextStyle(
-      color: Color(0x66FFFFFF),
-      fontFamily: 'Poppins',
-      fontWeight: FontWeight.w300,
-      fontSize: 12.0,);
+
   var _height = 100.0;
   var _alignement = Alignment.bottomLeft;
   var topp = 0.0;
@@ -35,19 +31,17 @@ class MyOrder extends StatefulWidget {
 class _MyOrderState extends State<MyOrder> {
   @override
   Widget build(BuildContext context) {
-    // print(widget.ido);
     final planetThumbnail = new Container(
-      child: new Hero(
-        tag: '${ItemContainer.idr}',
-        child: Container(
-          height: 100.0,
-          width: 100.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: NetworkImage(ItemContainer.photo),
-            ),
+      child: Container(
+        height: 100.0,
+        width: 100.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: NetworkImage(EmptyScaffold.photR == null
+                ? ItemContainer.photo
+                : EmptyScaffold.photR),
           ),
         ),
       ),
@@ -78,7 +72,11 @@ class _MyOrderState extends State<MyOrder> {
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(ItemContainer.nom, style: MyOrder.planetTitle),
+              new Text(
+                  EmptyScaffold.nomR == null
+                      ? ItemContainer.nom
+                      : EmptyScaffold.nomR,
+                  style: MyOrder.planetTitle),
               new Text('Cost : ' + widget.amount.toString(),
                   style: MyOrder.planetLocation),
               new Container(
@@ -86,31 +84,29 @@ class _MyOrderState extends State<MyOrder> {
                   width: 24.0,
                   height: 1.0,
                   margin: const EdgeInsets.symmetric(vertical: 8.0)),
-              
-               new Row(
-                  children: <Widget>[
-                    new Icon(Icons.location_on,
-                        size: 14.0, color: Color(0x66FFFFFF)),
-                    // new Text(order.etat, style: MyOrder.planetDistance),
-                    new Container(width: 24.0),
-                    new Icon(Icons.flight_land,
-                        size: 14.0, color: Color(0x66FFFFFF)),
-                    new Container(width: 24.0),
-                    StreamBuilder(
-                        stream: DatabaseService(uid: '1').getEtat(widget.ido),
-                        builder: (context, snapshot) {
-                          DocumentSnapshot dat = snapshot.data;
-                          return Flexible(
-                            child: new Text(
-                                dat.exists
-                                    ? snapshot.data["Etat"].toString()
-                                    : "Waiting",
-                                style: MyOrder.planetDistance),
-                          );
-                        }),
-                  ],
-                ),
-              
+              new Row(
+                children: <Widget>[
+                  new Icon(Icons.location_on,
+                      size: 14.0, color: Color(0x66FFFFFF)),
+                  // new Text(order.etat, style: MyOrder.planetDistance),
+                  new Container(width: 24.0),
+                  new Icon(Icons.flight_land,
+                      size: 14.0, color: Color(0x66FFFFFF)),
+                  new Container(width: 24.0),
+                  StreamBuilder(
+                    stream: DatabaseService(uid: '1').getEtat(widget.ido),
+                    builder: (context, snapshot) {
+                      DocumentSnapshot dat = snapshot.data;
+                      return Flexible(
+                        child: Container(
+                          child:
+                              dat.exists ? prise(snapshot.data) : nonPrise(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -122,56 +118,44 @@ class _MyOrderState extends State<MyOrder> {
       child: foodItemList(),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Ma Commande"),
-      ),
-      body: SingleChildScrollView(
-        child: new Container(
-           
-          margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              AnimatedContainer(
-                duration: Duration(seconds: 1),
-                height: widget._height,
-                child: FlatButton(
-                  
-                  onPressed: () {
-                    animateContainer();
-                  },
-                  child: new Stack(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: planetCard,
-                      ),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child:
-                              widget._height > 100 ? maCommande : Container()),
-                      AnimatedContainer(
-                          duration: Duration(seconds: 1),
-                          alignment: widget._alignement,
-                          child: planetThumbnail),
-                    ],
+    return new Container(
+      margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          AnimatedContainer(
+            duration: Duration(seconds: 1),
+            height: widget._height,
+            child: FlatButton(
+              onPressed: () {
+                animateContainer();
+              },
+              child: new Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: planetCard,
                   ),
-                ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: widget._height > 100 ? maCommande : Container()),
+                  AnimatedContainer(
+                      duration: Duration(seconds: 1),
+                      alignment: widget._alignement,
+                      child: planetThumbnail),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   animateContainer() {
     setState(() {
-      widget._height = widget._height == 100.0
-          ? 450
-          : 100.0;
+      widget._height = widget._height == 100.0 ? 450 : 100.0;
       widget._alignement = widget._alignement == Alignment.bottomLeft
           ? Alignment.topCenter
           : Alignment.bottomLeft;
@@ -190,6 +174,30 @@ class _MyOrderState extends State<MyOrder> {
           ),
         );
       },
+    );
+  }
+
+  Text prise(var result) {
+    return Text(
+      result["Etat"].toString(),
+      style: TextStyle(
+        color: Colors.green,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w300,
+        fontSize: 12.0,
+      ),
+    );
+  }
+
+  Text nonPrise() {
+    return Text(
+      "Waiting",
+      style: TextStyle(
+        color: Colors.red,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w300,
+        fontSize: 12.0,
+      ),
     );
   }
 }

@@ -22,6 +22,10 @@ class CartListBloc extends BlocBase {
     listSink.add(provider.removeFromList(listOfFood));
   }
 
+  emptyAllList(List<ListOfFood> listOfFood){
+    listSink.add(provider.emptyList(listOfFood));
+  }
+
   @override
   void dispose() {
     _listController.close();

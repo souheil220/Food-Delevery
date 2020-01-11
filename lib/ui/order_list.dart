@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/ui/my_order.dart';
+import '../ui/my_order.dart';
 
 class OrderList extends StatefulWidget {
-  var amount;
-  var listOfFoods;
-  var ido;
-  OrderList(this.amount, this.listOfFoods, this.ido);
+  List _lista;
+  OrderList(this._lista);
 
   static final id = 'order-list-page';
 
@@ -16,7 +14,15 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
-    
-    return MyOrder(widget.amount, widget.listOfFoods,widget.ido);
+    print(widget._lista.length);
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.all(8),
+        children: <Widget>[
+          for (var i in widget._lista) MyOrder(i.amount, i.listOfFoods, i.ido)
+        ],
+      ),
+    );
+    //MyOrder(widget._listOfCommand.amount, widget._listOfCommand.listOfFoods, widget._listOfCommand.ido),
   }
 }

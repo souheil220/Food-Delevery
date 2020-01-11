@@ -1,9 +1,9 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/bloc/cartListBloc.dart';
-import 'package:hello_world/ui/list_of_food.dart';
-import 'package:hello_world/ui/restaurants_menu.dart';
+import '../bloc/cartListBloc.dart';
+import 'list_of_food.dart';
+import 'restaurants_menu.dart';
 import 'cart_list_item.dart';
 import 'drag_target_widget.dart';
 
@@ -23,33 +23,36 @@ class _CartBodyState extends State<CartBody> {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(35, 40, 25, 0),
-      child: Column(
-        children: <Widget>[
-          CustumAppBar(),
-          title(),
-          Expanded(
-            flex: 1,
-            child: widget.listOfFood.length > 0
-                ? foodItemList()
-                : noItemContaner(),
-          ),
-          Container(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Image(
-                image: AssetImage('assets/img/delevry_guy.jpg'),
-                width: 80.0,
-                height: 100.0,
-              ),
-              Text("Delevery Price"),
-              Text("DA ${ widget.listOfFood.length > 0 ? RestaurantsMenu.deleveryPrice.toStringAsFixed(0) : 0}"),
-            ],
-          )),
-        ],
+    return Scaffold(
+          body: Container(
+        padding: EdgeInsets.fromLTRB(35, 40, 25, 0),
+        child: Column(
+          children: <Widget>[
+            CustumAppBar(),
+            title(),
+            Expanded(
+              flex: 1,
+              child: widget.listOfFood.length > 0
+                  ? foodItemList()
+                  : noItemContaner(),
+            ),
+            Container(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Image(
+                  image: AssetImage('assets/img/delevry_guy.jpg'),
+                  width: 80.0,
+                  height: 100.0,
+                ),
+                Text("Delevery Price"),
+                Text("DA ${ widget.listOfFood.length > 0 ? RestaurantsMenu.deleveryPrice.toStringAsFixed(0) : 0}"),
+              ],
+            )),
+          ],
+        ),
       ),
+
     );
   }
 
