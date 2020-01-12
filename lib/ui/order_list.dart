@@ -14,15 +14,17 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
-    print(widget._lista.length);
+    print(widget._lista);
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: <Widget>[
-          for (var i in widget._lista) MyOrder(i.amount, i.listOfFoods, i.ido)
+          for (var i in widget._lista)
+       
+           MyOrder(i.amount, i.listOfFoods, i.ido,i.photor,i.nomr)
         ],
       ),
     );
-    //MyOrder(widget._listOfCommand.amount, widget._listOfCommand.listOfFoods, widget._listOfCommand.ido),
+  
   }
 }

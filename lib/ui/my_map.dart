@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyMap extends StatefulWidget {
@@ -11,32 +12,19 @@ class MyMap extends StatefulWidget {
 
 class _MyMapState extends State<MyMap> {
   GoogleMapController _controller;
-  var _long;
-  var _lat;
-  @override
-  void initState() {
-    print(widget.myLocation);
-    super.initState();
-  }
+  List<LatLng> routeCoords;
+  GoogleMapPolyline googleMapPolyline =
+      GoogleMapPolyline(apiKey: 'AIzaSyAYpSEI59t0PhfjvcWgI3MkXl3P36Xqsbs');
 
-  /* @override
-  void initState() {
-    var curr = BrewList.currentLocation;
-
-    curr.then((value) {
-      print(value);
-      _long = value['Long'];
-      _lat = value['Lat'];
-    });
-    super.initState();
-  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
         onMapCreated: onMapCreated,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(40.6782, -73.9442), zoom: 14.0),
+        initialCameraPosition: CameraPosition(
+            target:
+                LatLng((widget.myLocation)['Lat'], (widget.myLocation)['Long']),
+            zoom: 14.0),
         mapType: MapType.normal,
       ),
     );

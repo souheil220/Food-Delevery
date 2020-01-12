@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/home.dart';
@@ -23,10 +21,10 @@ class _BottomNavigationBarreState extends State<BottomNavigationBarre> {
   final List<Widget> _children = [
     Profile(),
     Home(),
-   /* EmptyScaffold.listing == null
-        ? NoOrder()
-        : OrderList(
-            EmptyScaffold.amount, EmptyScaffold.listing, EmptyScaffold.ido),*/NoOrder()
+    if(EmptyScaffold.list3 == null)
+         NoOrder()
+        else for(var i in  EmptyScaffold.list3) OrderList(i
+            )
   ];
   void onTappedBar(int index) {
     setState(() {

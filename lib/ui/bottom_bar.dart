@@ -85,7 +85,9 @@ class _BottomBarState extends State<BottomBar> {
                   listOfCommand = ListOfCommand(
                       amount: returnTotalAmount(widget.listOfFoods),
                       listOfFoods: widget.listOfFoods,
-                      ido: id);
+                      ido: id,
+                      photor: ItemContainer.photo,
+                      nomr: ItemContainer.nom);
                   _list3 = widget._listOfCommand.addCommade(listOfCommand);
                   bloc.emptyAllList(widget.listOfFoods);
 
@@ -113,15 +115,12 @@ class _BottomBarState extends State<BottomBar> {
                   });
 
                   print(map0);
-                  MemoryStorage().writeToFile({
-                    'My Food': map0,
-                    'id': id,
-                    'totalamount': totalamount,
-                    'totalamount2': totalamount2,
-                    'nomR': ItemContainer.nom,
-                    'photoR': ItemContainer.photo
-                  }, EmptyScaffold.dir, 'myJSONFile.json',
-                      EmptyScaffold.jsonFile1, EmptyScaffold.existing);
+                  MemoryStorage().writeToFile(
+                      {'My Food': map0},
+                      EmptyScaffold.dir,
+                      'myJSONFile.json',
+                      EmptyScaffold.jsonFile1,
+                      EmptyScaffold.existing);
 
                   Navigator.pushReplacement(
                     context,
@@ -192,6 +191,7 @@ class _BottomBarState extends State<BottomBar> {
       'prix': list.prix,
       'quantity': list.quantity,
     };
+
     return map1;
   }
 
@@ -211,6 +211,11 @@ class _BottomBarState extends State<BottomBar> {
       map2[customer.commande] = newMap(list2[i]);
       i++;
     });
+    map2['id'] = id;
+    map2['totalamount'] = totalamount;
+    map2['totalamount2'] = totalamount2;
+    map2['nomR'] = ItemContainer.nom;
+    map2['photoR'] = ItemContainer.photo;
     return map2;
   }
 }

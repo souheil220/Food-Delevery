@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/database.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
@@ -9,7 +8,9 @@ class MyOrder extends StatefulWidget {
   var amount;
   var listOfFoods;
   var ido;
-  MyOrder(this.amount, this.listOfFoods, this.ido);
+  var _nom;
+  var _photo;
+  MyOrder(this.amount, this.listOfFoods, this.ido, this._photo, this._nom);
   static const TextStyle planetTitle = const TextStyle(
       color: Color(0xFFFFFFFF),
       fontFamily: 'Poppins',
@@ -39,9 +40,8 @@ class _MyOrderState extends State<MyOrder> {
           shape: BoxShape.circle,
           image: DecorationImage(
             fit: BoxFit.fill,
-            image: NetworkImage(EmptyScaffold.photR == null
-                ? ItemContainer.photo
-                : EmptyScaffold.photR),
+            image: NetworkImage(
+                widget._photo == null ? ItemContainer.photo : widget._photo),
           ),
         ),
       ),
@@ -72,10 +72,7 @@ class _MyOrderState extends State<MyOrder> {
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(
-                  EmptyScaffold.nomR == null
-                      ? ItemContainer.nom
-                      : EmptyScaffold.nomR,
+              new Text(widget._nom == null ? ItemContainer.nom : widget._nom,
                   style: MyOrder.planetTitle),
               new Text('Cost : ' + widget.amount.toString(),
                   style: MyOrder.planetLocation),
@@ -96,12 +93,10 @@ class _MyOrderState extends State<MyOrder> {
                   StreamBuilder(
                     stream: DatabaseService(uid: '1').getEtat(widget.ido),
                     builder: (context, snapshot) {
-                      DocumentSnapshot dat = snapshot.data;
-                      return Flexible(
-                        child: Container(
-                          child:
-                              dat.exists ? prise(snapshot.data) : nonPrise(),
-                        ),
+                      return Container(
+                        child: (snapshot.data).exists
+                            ? prise(snapshot.data)
+                            : nonPrise(),
                       );
                     },
                   ),
@@ -177,14 +172,16 @@ class _MyOrderState extends State<MyOrder> {
     );
   }
 
-  Text prise(var result) {
-    return Text(
-      result["Etat"].toString(),
-      style: TextStyle(
-        color: Colors.green,
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.w300,
-        fontSize: 12.0,
+  Widget prise(var result) {
+    return Flexible(
+      child: Text(
+        result["Etat"].toString(),
+        style: TextStyle(
+          color: Colors.green,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w300,
+          fontSize: 12.0,
+        ),
       ),
     );
   }

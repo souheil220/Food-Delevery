@@ -1,17 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:hello_world/models/list_of_command.dart';
 import 'package:hello_world/services/memory_storage.dart';
 import 'package:hello_world/ui/delv_home.dart';
 import 'package:hello_world/ui/list_of_food.dart';
 import 'package:hello_world/ui/order_information_conf.dart';
 import 'package:hello_world/ui/page_view_widget.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:hello_world/ui/profile.dart';
 import '../fonctions/return_total_amount.dart';
 import 'bottum_navigation_bar.dart';
-import 'home.dart';
-import 'order_list.dart';
 
 class EmptyScaffold extends StatefulWidget {
   static const String id = 'Empty-Scaffold';
@@ -26,6 +23,8 @@ class EmptyScaffold extends StatefulWidget {
   static String nomR;
   static var totalamount;
   static var totalamount2;
+  static List list3 = [];
+
   @override
   _EmptyScaffoldState createState() => _EmptyScaffoldState();
 }
@@ -34,7 +33,7 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
   verifying(BuildContext context) async {
     var exist;
     exist = await MemoryStorage().getLocalPath();
-    
+
     setState(() {
       EmptyScaffold.dir = exist[1];
       EmptyScaffold.jsonFile1 = exist[0];
@@ -49,7 +48,9 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => OrderInformationConf(
-                    exist[3]['order'], exist[3]['order']['id'],exist[3]['myLocation']),
+                    exist[3]['order'],
+                    exist[3]['order']['id'],
+                    exist[3]['myLocation']),
               ),
             );
           });
@@ -60,22 +61,13 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
         }
       } else {
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          if(exist[3]["order"]!=null){
-              setState(() {
-            EmptyScaffold.listing = myOldListOfFood(exist[3]["order"]);
-            EmptyScaffold.ido = exist[3]["id"];
-            EmptyScaffold.totalamount = exist[3]["totalamount"];
-            EmptyScaffold.totalamount2 = exist[3]["totalamount2"];
-            EmptyScaffold.photR = exist[3]["photoR"];
-            EmptyScaffold.nomR = exist[3]["nomR"];
-            EmptyScaffold.amount = ReturnTotalAmount().returnTotalAmount(
-              EmptyScaffold.listing,
-              EmptyScaffold.totalamount,
-              EmptyScaffold.totalamount2,
-            );
-          });
+          
+          if (exist[3]["My Food"] != null) {
+            setState(() {
+             EmptyScaffold.list3 = myFood(exist[3]["My Food"]);
+            });
           }
-        
+
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => BottomNavigationBarre(),
           ));
@@ -90,8 +82,6 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
 
   static var amount, ido, listOfFoods;
 
-  
-
   @override
   void initState() {
     verifying(context);
@@ -100,9 +90,50 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
+    return Scaffold();
+  }
+
+  List myFood(var myfood) {
+    ListOfCommand listOfCommand;
+    RegExp re = new RegExp(r'commande');
+    List _lista = [];
+    List<ListOfFood> k = [];
+    ListOfCommand l = ListOfCommand();
+    for (var i in myfood.keys) {
+      for (var j in myfood[i].keys) {
+        if ((re.matchAsPrefix(j)) != null) {
+          k.add(myOldListOfFood2(myfood[i][j]));
+        }
+      }
+      listOfCommand = ListOfCommand(
+        amount: ReturnTotalAmount().returnTotalAmount(
+            k, myfood[i]["totalamount"], myfood[i]["totalamount2"]),
+        ido: myfood[i]['id'],
+        listOfFoods: k,
+        nomr: myfood[i]["nomR"],
+        photor: myfood[i]["photoR"]
+      );
+      var a = l.addCommade(listOfCommand);
+
+      _lista.add(a);
+      k = [];
+      l.removeAll(a);
+    }
+    return _lista;
+  }
+
+  myOldListOfFood2(var myfoodij) {
+    ListOfFood list;
+
+    list = ListOfFood(
+      id: myfoodij["id"],
+      nom: myfoodij["nom"],
+      image: myfoodij["image"],
+      prix: myfoodij["prix"],
+      quantity: myfoodij["quantity"],
     );
+
+    return list;
   }
 
   List<ListOfFood> myOldListOfFood(var order) {

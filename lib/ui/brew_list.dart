@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_world/services/currentLocation.dart';
@@ -10,6 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 class BrewList extends StatefulWidget {
   static var currentLocation;
+  static var lat;
+  static var long;
 
   @override
   _BrewListState createState() => _BrewListState();
@@ -73,12 +73,15 @@ class _BrewListState extends State<BrewList> {
           _allowed = true;
           try {
             BrewList.currentLocation = CurrentLocation().getLocation();
+            BrewList.currentLocation.then((value) {
+               BrewList.lat = value.latitude ;
+            BrewList.long = value.longitude;
+            });
           } catch (e) {
             print(e);
           }
         }
       });
-      print(BrewList.currentLocation);
     }
   }
 

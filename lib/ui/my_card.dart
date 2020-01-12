@@ -82,17 +82,13 @@ class _MyCardState extends State<MyCard> {
                 child: Icon(Icons.check),
                 textColor: Colors.green,
                 onPressed: () {
-                  var located;
-
-                  BrewList.currentLocation.then((value) {
-                    setState(() {
-                       located = value;
-                    });
-                   
-                  });
+                 
                   MemoryStorage().writeToFile({
                     'order': widget.order,
-                    'myLocation':located
+                    'myLocation':{
+                      'Lat':BrewList.lat,
+                      'Long':BrewList.long,
+                    }
                   }, EmptyScaffold.dir, 'myJSONFile.json',
                       EmptyScaffold.jsonFile1, EmptyScaffold.existing);
 

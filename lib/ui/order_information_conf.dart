@@ -28,7 +28,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 69),
-                child: coolOrders(widget.order, MyOrders(widget.order),
+                child: coolOrders(MyOrders(widget.order),
                     Text('Bénéfice : ${widget.order['Total']}'), MyLocation(widget.myLocation)),
               ),
               Align(
@@ -60,7 +60,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
     );
   }
 
-  Widget coolOrders(var order, Widget myorder, Text total, Widget location) {
+  Widget coolOrders(Widget myorder, Text total, Widget location) {
     return Padding(
       padding: const EdgeInsets.only(left: 5.0, right: 5.0),
       child: Container(
