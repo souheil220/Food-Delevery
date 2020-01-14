@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/fonctions/ask_permission.dart';
+import 'package:hello_world/services/currentLocation.dart';
 import 'package:hello_world/ui/food_show_case.dart';
-import 'bottum_navigation_bar.dart';
 import 'custom_appbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -18,6 +19,8 @@ class RestaurantsMenu extends StatefulWidget {
 }
 
 class _RestaurantsMenuState extends State<RestaurantsMenu> {
+  var _permission;
+  bool _allowed = false;
   bool _loaded = false;
 
   var result;
@@ -46,7 +49,7 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
       lat1 = _data["Lat"];
       long1 = _data["Long"];
     });
-    await getLocation().then((rep) {
+    await CurrentLocation().getLocation().then((rep) {
       lat2 = rep.latitude;
       long2 = rep.longitude;
     });
@@ -65,38 +68,42 @@ class _RestaurantsMenuState extends State<RestaurantsMenu> {
     return distanceInMeters;
   }
 
-  Future getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return (position);
+  askUserPermission() async {
+    _permission = await AskPermission().askForPermission();
+
+    setState(() {
+      _allowed = _permission;
+      if (_allowed) {
+        getPosition();
+      }
+    });
   }
 
   @override
   void initState() {
-    super.initState();
-    getPosition();
     getData();
-    setState(() {
-      RestaurantsMenu.location = getLocation();
-    });
+askUserPermission();
+    super.initState();
   }
 
   _RestaurantsMenuState(this.result);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: ListView(
-            children: <Widget>[
-              CustomAppBar(),
-              _loaded
-                  ? tab(identifier, identifier.keys.length)
-                  : CircularProgressIndicator(),
-            ],
-          ),
-        ),
-      ),
+      body: _allowed
+          ? SafeArea(
+              child: Container(
+                child: ListView(
+                  children: <Widget>[
+                    CustomAppBar(),
+                    _loaded
+                        ? tab(identifier, identifier.keys.length)
+                        : CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            )
+          : Center(child: CircularProgressIndicator()),
     );
   }
 

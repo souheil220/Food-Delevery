@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hello_world/fonctions/ask_permission.dart';
 import 'package:hello_world/services/currentLocation.dart';
+import 'package:hello_world/ui/no_order.dart';
 import 'package:provider/provider.dart';
 import 'my_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,13 +18,32 @@ class BrewList extends StatefulWidget {
 }
 
 class _BrewListState extends State<BrewList> {
+  var _permission;
   bool _allowed = false;
-  PermissionStatus _status;
   final FirebaseMessaging _messaging = FirebaseMessaging();
+
+  askUserPermission() async {
+    _permission = await AskPermission().askForPermission();
+
+    setState(() {
+      _allowed = _permission;
+      if (_allowed) {
+        try {
+          BrewList.currentLocation = CurrentLocation().getLocation();
+          BrewList.currentLocation.then((value) {
+            BrewList.lat = value.latitude;
+            BrewList.long = value.longitude;
+          });
+        } catch (e) {
+          print(e);
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
-    _askForPermission();
+    askUserPermission();
 
     super.initState();
     _messaging.getToken().then((onValue) {
@@ -30,63 +51,30 @@ class _BrewListState extends State<BrewList> {
     });
   }
 
-  _askForPermission() {
-    PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.location)
-        .then(_updateStatus);
-
-    if (_status == PermissionStatus.unknown ||
-        _status == PermissionStatus.denied ||
-        _status == null) {
-      _askPermissoon();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<QuerySnapshot>(context);
+
     return _allowed
-        ? ListView(
-            children: <Widget>[
-              SizedBox(
-                height: 10,
+        ? Scaffold(
+            body: Center(
+              child: Container(
+                child: orders == null
+                    ? NoOrder()
+                    : (orders.documents.isEmpty)
+                        ? NoOrder()
+                        : ListView(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 10,
+                              ),
+                              for (var order in orders.documents)
+                                MyCard(order.data),
+                            ],
+                          ),
               ),
-              if (orders == null)
-                Text('no order made')
-              else
-                for (var order in orders.documents) MyCard(order.data),
-            ],
+            ),
           )
-        : CircularProgressIndicator();
-  }
-
-  void _askPermissoon() {
-    PermissionHandler().requestPermissions([PermissionGroup.location]).then(
-        _onStatusRequested);
-  }
-
-  void _updateStatus(PermissionStatus status) {
-    if (status != _status) {
-      setState(() {
-        _status = status;
-        if (_status == PermissionStatus.granted) {
-          _allowed = true;
-          try {
-            BrewList.currentLocation = CurrentLocation().getLocation();
-            BrewList.currentLocation.then((value) {
-               BrewList.lat = value.latitude ;
-            BrewList.long = value.longitude;
-            });
-          } catch (e) {
-            print(e);
-          }
-        }
-      });
-    }
-  }
-
-  void _onStatusRequested(Map<PermissionGroup, PermissionStatus> statuses) {
-    final status = statuses[PermissionGroup.locationWhenInUse];
-    _updateStatus(status);
+        : Center(child: CircularProgressIndicator());
   }
 }

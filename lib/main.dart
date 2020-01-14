@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         initialRoute: EmptyScaffold.id,
-        // initialRoute: PageViewWidget.id,
         routes: {
           Profile.id:(context) => Profile(),
           MyMap.id:(context) => MyMap(page),

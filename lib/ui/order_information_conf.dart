@@ -29,7 +29,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
               Padding(
                 padding: const EdgeInsets.only(top: 69),
                 child: coolOrders(MyOrders(widget.order),
-                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation(widget.myLocation)),
+                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation(widget.myLocation,widget.order)),
               ),
               Align(
                 alignment: Alignment.topCenter,

@@ -17,19 +17,16 @@ class MyCard extends StatefulWidget {
 class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
-    //print(order);
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          Hero(
-            tag: (widget.order['id']).toString(),
-            child: test(
+           test(
                 context,
                 (widget.order['photo']),
                 Text(widget.order['name']),
                 Text('Bénéfice : ${widget.order['Total']}')),
-          )
+          
           //SizedBox(height: 10,)
         ],
       ),

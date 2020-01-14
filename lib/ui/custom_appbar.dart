@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Icon(Icons.arrow_back),
+            IconButton(icon: Icon(Icons.arrow_back),onPressed:()=> Navigator.pop(context),),
             StreamBuilder(
               stream: bloc.listStream,
               builder: (context, snapshot) {
