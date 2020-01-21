@@ -20,7 +20,7 @@ class _MyLocationState extends State<MyLocation> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => MyMap(widget.order)));
+                builder: (BuildContext context) => MyMap(widget.order,widget.myLocation)));
       },
     );
   }

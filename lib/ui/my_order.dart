@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/database.dart';
-import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/item_container.dart';
 import 'package:hello_world/ui/item_content.dart';
 
@@ -29,7 +28,9 @@ class MyOrder extends StatefulWidget {
   _MyOrderState createState() => _MyOrderState();
 }
 
+
 class _MyOrderState extends State<MyOrder> {
+  
   @override
   Widget build(BuildContext context) {
     final planetThumbnail = new Container(
@@ -94,7 +95,7 @@ class _MyOrderState extends State<MyOrder> {
                     stream: DatabaseService(uid: '1').getEtat(widget.ido),
                     builder: (context, snapshot) {
                       return Container(
-                        child: (snapshot.data).exists
+                        child:  (snapshot.data).exists
                             ? prise(snapshot.data)
                             : nonPrise(),
                       );
@@ -107,7 +108,7 @@ class _MyOrderState extends State<MyOrder> {
         ),
       ),
     );
-
+    
     final maCommande = Container(
       margin: const EdgeInsets.only(left: 24.0, right: 24.0, top: 200.0),
       child: foodItemList(),

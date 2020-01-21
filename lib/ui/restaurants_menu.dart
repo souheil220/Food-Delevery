@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/fonctions/ask_permission.dart';
+import 'package:hello_world/functions/ask_permission.dart';
 import 'package:hello_world/services/currentLocation.dart';
 import 'package:hello_world/ui/food_show_case.dart';
 import 'custom_appbar.dart';

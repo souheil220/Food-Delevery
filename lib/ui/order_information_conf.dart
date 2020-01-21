@@ -6,9 +6,9 @@ import 'my_orders.dart';
 class OrderInformationConf extends StatefulWidget {
   static const id = 'order-Info-after-confirm';
   var order;
-  var orid;
+  
   var myLocation;
-  OrderInformationConf(this.order, this.orid,this.myLocation);
+  OrderInformationConf(this.order,this.myLocation);
 
   @override
   _OrderInformationConfState createState() => _OrderInformationConfState();
@@ -17,6 +17,7 @@ class OrderInformationConf extends StatefulWidget {
 class _OrderInformationConfState extends State<OrderInformationConf> {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Information'),
@@ -34,8 +35,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  child: Hero(
-                    tag: widget.orid.toString(),
+                 
                     child: Container(
                       alignment: new FractionalOffset(0.0, 0.5),
                       width: 90.0,
@@ -46,7 +46,7 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
                           fit: BoxFit.fill,
                           image: NetworkImage(
                             widget.order['photo'],
-                          ),
+                          
                         ),
                       ),
                     ),

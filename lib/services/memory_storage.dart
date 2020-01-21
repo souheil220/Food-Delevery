@@ -7,11 +7,11 @@ class MemoryStorage {
   MemoryStorage();
   File jsonFile;
   Directory dir;
-  String fileName = "myJSONFile.json";
+  //String fileName = "myJSONFile.json";
   bool fileExists = false;
   Map<String, dynamic> fileContent;
 
-  getLocalPath() async {
+  getLocalPath( String fileName) async {
     var lista = [];
     await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
@@ -39,10 +39,12 @@ class MemoryStorage {
   void writeToFile(Map<String, dynamic> content, Directory dirr, String fileNom,
       File jsonFile1, bool fileExist1) {
     print("Writing to file!");
+    print(fileExist1);
     if (fileExist1) {
       print("File exists");
       Map<String, dynamic> jsonFileContent =
           json.decode(jsonFile1.readAsStringSync());
+          print('jsonFileContent $jsonFileContent');
       jsonFileContent.addAll(content);
       jsonFile1.writeAsStringSync(jsonEncode(jsonFileContent));
     } else {

@@ -17,10 +17,10 @@ class _HomeState extends State<Home> {
 
   void getData() {
     databaseReference.once().then((DataSnapshot snapshot) {
-      setState(() {
+      
         _data = snapshot.value;
         showSpinner = false;
-      });
+      
     });
   }
 

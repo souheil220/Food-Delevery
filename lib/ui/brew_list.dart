@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hello_world/fonctions/ask_permission.dart';
+import 'package:hello_world/functions/ask_permission.dart';
 import 'package:hello_world/services/currentLocation.dart';
 import 'package:hello_world/ui/no_order.dart';
 import 'package:provider/provider.dart';
 import 'my_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class BrewList extends StatefulWidget {
   static var currentLocation;
@@ -33,6 +32,7 @@ class _BrewListState extends State<BrewList> {
           BrewList.currentLocation.then((value) {
             BrewList.lat = value.latitude;
             BrewList.long = value.longitude;
+          
           });
         } catch (e) {
           print(e);

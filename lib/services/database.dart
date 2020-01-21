@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hello_world/functions/notification.dart';
+import 'package:hello_world/ui/my_card.dart';
 
 class DatabaseService {
   final String uid;
@@ -10,6 +12,8 @@ class DatabaseService {
       Firestore.instance.collection('users');
   final CollectionReference orderCollection =
       Firestore.instance.collection('orders');
+  final CollectionReference pushToken =
+      Firestore.instance.collection('pushToken');
   final CollectionReference orderTakenCollection =
       Firestore.instance.collection('orders Taken');
   final databaseReference = Firestore.instance;
@@ -28,8 +32,6 @@ class DatabaseService {
     return orderTakenCollection.document(id.toString()).snapshots();
   }
 
-  
-
   verifyIfDelevrer(BuildContext context, var typeOfUser, var page) async {
     await FirebaseAuth.instance.currentUser().then((user) {
       userCollection
@@ -38,6 +40,7 @@ class DatabaseService {
           .then((docs) {
         if (docs.documents[0].exists) {
           if ((docs.documents[0].data['role'] == typeOfUser)) {
+            NotificationUser().subscribeToTopic();
             Navigator.pushNamed(context, page);
           } else {
             print("Acaount doesn't exist");
@@ -45,6 +48,14 @@ class DatabaseService {
         }
       });
     });
+  }
+
+  Future saveToken(var token) async {
+    var id = orderCollection.document().documentID;
+    MyCard.id = id;
+    await pushToken.document(orderCollection.document(id).documentID).setData(
+      {'devtoken': token},
+    );
   }
 
   Future orderData(var namer, var photor, var listoffood, var location,
@@ -76,14 +87,13 @@ class DatabaseService {
   }
 
 //creat collection of order taken
-  Future orderTaken(var id,) async {
-
-    
+  Future orderTaken(
+    var id,
+  ) async {
     await orderTakenCollection
         .document(orderTakenCollection.document(id).documentID)
         .setData(
       {
-      
         'id': id,
         'Etat': "Pris en charge",
       },
@@ -98,9 +108,10 @@ class DatabaseService {
   }
 
 //delete document
-  void deleteData(var id) {
+  void deleteData(var id,String colection) {
     try {
-      databaseReference.collection('orders').document(id).delete();
+      print(id);
+      databaseReference.collection(colection).document(id).delete();
     } catch (e) {
       print(e.toString());
     }

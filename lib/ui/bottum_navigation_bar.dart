@@ -7,7 +7,7 @@ import 'package:hello_world/ui/profile.dart';
 
 class BottomNavigationBarre extends StatefulWidget {
   static const String id = 'bottom-bar';
-
+  
   BottomNavigationBarre();
   @override
   _BottomNavigationBarreState createState() => _BottomNavigationBarreState();
@@ -17,18 +17,28 @@ class _BottomNavigationBarreState extends State<BottomNavigationBarre> {
   var amount, ido;
 
   int _currentIndex = 1;
+  
+ static   widgetReturned(){
+      if (EmptyScaffold.list3.isEmpty){
+      return NoOrder();
+      }
+    else{
+      print('The else');
+      for (var i in EmptyScaffold.list3) return OrderList(i);
+      }
+  }
 
   final List<Widget> _children = [
+    
     Profile(),
     Home(),
-    if(EmptyScaffold.list3 == null)
-         NoOrder()
-        else for(var i in  EmptyScaffold.list3) OrderList(i
-            )
+    widgetReturned(),
+   
   ];
   void onTappedBar(int index) {
     setState(() {
       _currentIndex = index;
+     
     });
   }
 

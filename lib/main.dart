@@ -36,9 +36,9 @@ class MyApp extends StatelessWidget {
         initialRoute: EmptyScaffold.id,
         routes: {
           Profile.id:(context) => Profile(),
-          MyMap.id:(context) => MyMap(page),
+          MyMap.id:(context) => MyMap(page,page),
           'Order-List': (context) => OrderList(page),
-          '/order-after-conf': (context) => OrderInformationConf(page, page,page),
+          '/order-after-conf': (context) => OrderInformationConf(page, page),
           LoginRegisterUser.id: (context) => LoginRegisterUser(),
           EmptyScaffold.id: (context) => EmptyScaffold(),
           LoginRegisterDelev.id: (context) => LoginRegisterDelev(),

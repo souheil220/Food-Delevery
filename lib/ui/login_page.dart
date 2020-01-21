@@ -387,16 +387,20 @@ class _LoginPageState extends State<LoginPage>
 
                         MemoryStorage().writeToFile(
                             {"email": _email, 'type': widget.typeOfUser},
+                            EmptyScaffold.userdir,
+                            'userJSONFile.json',
+                            EmptyScaffold.userjsonFile1,
+                            EmptyScaffold.userexisting);
+                        MemoryStorage().writeToFile(
+                            null,
                             EmptyScaffold.dir,
                             'myJSONFile.json',
                             EmptyScaffold.jsonFile1,
                             EmptyScaffold.existing);
                         final _result = await _auth.signInWithEmailAndPassword(
                             _email, _password);
-                        // print(data);
-                        if (_result != null) {
-                          //   Navigator.pushNamed(context, widget.page);
 
+                        if (_result != null) {
                           DatabaseService().verifyIfDelevrer(
                               context, widget.typeOfUser, widget.page);
                         }
