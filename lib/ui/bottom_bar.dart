@@ -114,10 +114,7 @@ class _BottomBarState extends State<BottomBar> {
                     });
                   });
 
-                  print('map $map0');
-                  print('dir ${EmptyScaffold.dir}');
-                  print('jsonFile1 ${EmptyScaffold.jsonFile1}');
-                  print('existing ${EmptyScaffold.existing}');
+                 
                   MemoryStorage().writeToFile(
                       {'My Food': map0},
                       EmptyScaffold.dir,

@@ -5,6 +5,7 @@ import 'package:hello_world/ui/delv_home.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/login_register_delev.dart';
 import 'package:hello_world/ui/login_register_user.dart';
+import 'package:hello_world/ui/no_internet.dart';
 import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/page_view_widget.dart';
 import 'package:hello_world/ui/profile.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         initialRoute: EmptyScaffold.id,
         routes: {
           Profile.id:(context) => Profile(),
+          NoInternet.id:(context) => NoInternet(),
           MyMap.id:(context) => MyMap(page,page),
           'Order-List': (context) => OrderList(page),
           '/order-after-conf': (context) => OrderInformationConf(page, page),
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
           LoginRegisterDelev.id: (context) => LoginRegisterDelev(),
           PageViewWidget.id: (context) => PageViewWidget(),
           DeleveryHomePage.id: (context) => DeleveryHomePage(),
-          LoginPage.id: (context) => LoginPage(page, typeOfUser, page, page),
+          LoginPage.id: (context) => LoginPage(page, typeOfUser, page, page,page),
           Home.id: (context) => Home(),
           '/restaurant-menu': (context) => RestaurantsMenu(),
           BottomNavigationBarre.id: (context) => BottomNavigationBarre()

@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hello_world/services/database.dart';
 import 'package:hello_world/services/memory_storage.dart';
+import 'package:hello_world/ui/connection.dart';
 //import '../style/theme.dart' as Theme;
 import '../utils/bubble_indication_painter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -19,12 +22,9 @@ class LoginPage extends StatefulWidget {
   final String typeOfUser;
   final Color loginGradientStart;
   Color loginGradientEnd;
-  LoginPage(
-    this.page,
-    this.typeOfUser,
-    this.loginGradientStart,
-    this.loginGradientEnd,
-  );
+  final String animationName;
+  LoginPage(this.page, this.typeOfUser, this.loginGradientStart,
+      this.loginGradientEnd, this.animationName);
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -103,11 +103,19 @@ class _LoginPageState extends State<LoginPage>
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 75.0),
-                  child: new Image(
-                      width: 250.0,
-                      height: 191.0,
-                      fit: BoxFit.fill,
-                      image: new AssetImage('assets/img/login_logo.png')),
+                  child: Container(
+                    height: 191.0,
+                    width: 250.0,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: FlareActor(
+                        'assets/animation/${widget.animationName}.flr',
+                        alignment: Alignment.center,
+                        fit: BoxFit.fill,
+                        animation: '${widget.animationName}',
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
@@ -381,32 +389,46 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       ),
                       onPressed: () async {
+                     
                         setState(() {
                           showSpinner = true;
                         });
 
-                        MemoryStorage().writeToFile(
-                            {"email": _email, 'type': widget.typeOfUser},
-                            EmptyScaffold.userdir,
-                            'userJSONFile.json',
-                            EmptyScaffold.userjsonFile1,
-                            EmptyScaffold.userexisting);
-                        MemoryStorage().writeToFile(
-                            null,
-                            EmptyScaffold.dir,
-                            'myJSONFile.json',
-                            EmptyScaffold.jsonFile1,
-                            EmptyScaffold.existing);
-                        final _result = await _auth.signInWithEmailAndPassword(
-                            _email, _password);
+                        try {
+                         
+                          final _result = await _auth
+                              .signInWithEmailAndPassword(_email, _password);
 
-                        if (_result != null) {
-                          DatabaseService().verifyIfDelevrer(
-                              context, widget.typeOfUser, widget.page);
+                          if (_result != null) {
+                             MemoryStorage().writeToFile(
+                              {"email": _email, 'type': widget.typeOfUser},
+                              EmptyScaffold.userdir,
+                              'userJSONFile.json',
+                              EmptyScaffold.userjsonFile1,
+                              EmptyScaffold.userexisting);
+                          MemoryStorage().writeToFile(
+                              {'My Food': ''},
+                              EmptyScaffold.dir,
+                              'myJSONFile.json',
+                              EmptyScaffold.jsonFile1,
+                              EmptyScaffold.existing);
+                            DatabaseService().verifyIfDelevrer(
+                                context, widget.typeOfUser, widget.page,_email);
+                          }
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        } catch (e) {
+                          AlertDialog(
+                            title: Text("Erreur"),
+                            content: Text(
+                              e.toString(),
+                            ),
+                            actions: <Widget>[
+                              CupertinoDialogAction(child: Text('ok'),onPressed:()=>dispose() ,)
+                            ],
+                          );
                         }
-                        setState(() {
-                          showSpinner = false;
-                        });
                       }),
                 ),
               ],

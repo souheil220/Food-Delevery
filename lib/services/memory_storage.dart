@@ -39,7 +39,6 @@ class MemoryStorage {
   void writeToFile(Map<String, dynamic> content, Directory dirr, String fileNom,
       File jsonFile1, bool fileExist1) {
     print("Writing to file!");
-    print(fileExist1);
     if (fileExist1) {
       print("File exists");
       Map<String, dynamic> jsonFileContent =

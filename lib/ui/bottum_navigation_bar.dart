@@ -5,40 +5,56 @@ import 'package:hello_world/ui/no_order.dart';
 import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/profile.dart';
 
+import 'connection.dart';
+import 'no_internet.dart';
+
 class BottomNavigationBarre extends StatefulWidget {
   static const String id = 'bottom-bar';
-  
+
   BottomNavigationBarre();
   @override
   _BottomNavigationBarreState createState() => _BottomNavigationBarreState();
 }
 
 class _BottomNavigationBarreState extends State<BottomNavigationBarre> {
+bool _connected = true;
+  _chek() async {
+    await Connection().checkInternetConnectivity().then((e) {
+      _connected = e;
+    });
+    setState(() {
+      var con = _connected;
+      if (con == false) {
+        Navigator.of(context).pushReplacementNamed(NoInternet.id);
+      }
+    });
+  }
+  @override
+  void initState() {
+    _chek();
+    super.initState();
+  }
   var amount, ido;
 
   int _currentIndex = 1;
-  
- static   widgetReturned(){
-      if (EmptyScaffold.list3.isEmpty){
+
+  static widgetReturned() {
+    print(EmptyScaffold.list3);
+    if (EmptyScaffold.list3.isEmpty) {
       return NoOrder();
-      }
-    else{
-      print('The else');
+    } else {
       for (var i in EmptyScaffold.list3) return OrderList(i);
-      }
+    }
   }
 
   final List<Widget> _children = [
-    
     Profile(),
     Home(),
     widgetReturned(),
-   
   ];
   void onTappedBar(int index) {
     setState(() {
       _currentIndex = index;
-     
     });
   }
 

@@ -23,7 +23,7 @@ class _LoginRegisterUserState extends State<LoginRegisterUser> {
       children: <Widget>[
         Container(
           child: LoginPage(BottomNavigationBarre.id, 'Consumer',
-              LoginRegisterUser.loginGradientStart, LoginRegisterUser.loginGradientEnd),
+              LoginRegisterUser.loginGradientStart, LoginRegisterUser.loginGradientEnd,'burger'),
         ),
         Positioned(
           top: 30,

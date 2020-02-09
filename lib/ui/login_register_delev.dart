@@ -22,7 +22,7 @@ class _LoginRegisterDelevState extends State<LoginRegisterDelev> {
       children: <Widget>[
         Container(
           child: LoginPage(DeleveryHomePage.id, 'Deliverer', LoginRegisterDelev.loginGradientStart,
-              LoginRegisterDelev.loginGradientEnd),
+              LoginRegisterDelev.loginGradientEnd,'delivere'),
         ),
         Positioned(
           right: 5,

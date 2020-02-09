@@ -13,12 +13,15 @@ import 'bottum_navigation_bar.dart';
 class EmptyScaffold extends StatefulWidget {
   static const String id = 'Empty-Scaffold';
   EmptyScaffold({Key key}) : super(key: key);
+  
   static Directory dir;
-  static Directory userdir;
-  static File jsonFile1;
-  static File userjsonFile1;
+  static File jsonFile1;                                
   static bool existing;
+                              
+  static Directory userdir;
+  static File userjsonFile1;
   static bool userexisting;
+  
   static List listing;
   static String ido;
   static String amount;
@@ -50,10 +53,10 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
       EmptyScaffold.jsonFile1 = exist[0];
       EmptyScaffold.existing = exist[2];
     });
- //   print(userexist);
-   // print(exist[3]==null);
+    print('user $userexist');
+    print(exist[3]);
 
-    if (userexist[2]) {
+    if (userexist[2]==true) {
       if (userexist[3]['type'] == 'Deliverer') {
         if (exist[3] != null) {
         if (exist[3]['order'] != null) {

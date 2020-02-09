@@ -92,14 +92,17 @@ askUserPermission();
     return Scaffold(
       body: _allowed
           ? SafeArea(
-              child: Container(
-                child: ListView(
-                  children: <Widget>[
-                    CustomAppBar(),
-                    _loaded
-                        ? tab(identifier, identifier.keys.length)
-                        : CircularProgressIndicator(),
-                  ],
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  child: ListView(
+                    children: <Widget>[
+                      CustomAppBar(),
+                      _loaded
+                          ? tab(identifier, identifier.keys.length)
+                          : CircularProgressIndicator(),
+                    ],
+                  ),
                 ),
               ),
             )

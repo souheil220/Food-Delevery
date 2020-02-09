@@ -34,6 +34,10 @@ dependencies:
   path_provider: ^1.5.1
   curved_navigation_bar: ^0.3.1
   permission_handler: ^4.0.0
+  flare_flutter: ^2.0.1
+  connectivity: ^0.4.6+2
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,6 +65,9 @@ flutter:
       - assets/delevry_guy.jpg
       - assets/destination_map_marker.png
       - assets/driving_pin.png
+      - assets/animation/delivere.flr
+      - assets/animation/burger.flr
+      - assets/img/wifi.png
 
   fonts:
     - family: WorkSansSemiBold

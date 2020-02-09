@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hello_world/functions/notification.dart';
+import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/my_card.dart';
+
+import 'memory_storage.dart';
 
 class DatabaseService {
   final String uid;
@@ -32,7 +35,8 @@ class DatabaseService {
     return orderTakenCollection.document(id.toString()).snapshots();
   }
 
-  verifyIfDelevrer(BuildContext context, var typeOfUser, var page) async {
+  verifyIfDelevrer(
+      BuildContext context, var typeOfUser, var page, String email) async {
     await FirebaseAuth.instance.currentUser().then((user) {
       userCollection
           .where('uid', isEqualTo: user.uid)
@@ -40,8 +44,22 @@ class DatabaseService {
           .then((docs) {
         if (docs.documents[0].exists) {
           if ((docs.documents[0].data['role'] == typeOfUser)) {
-            NotificationUser().subscribeToTopic();
+            if (typeOfUser == 'Deliverer') {
+              NotificationUser().subscribeToTopic();
+            }
             Navigator.pushNamed(context, page);
+            MemoryStorage().writeToFile(
+                {"email": email, 'type': typeOfUser},
+                EmptyScaffold.userdir,
+                'userJSONFile.json',
+                EmptyScaffold.userjsonFile1,
+                EmptyScaffold.userexisting);
+            MemoryStorage().writeToFile(
+                null,
+                EmptyScaffold.dir,
+                'myJSONFile.json',
+                EmptyScaffold.jsonFile1,
+                EmptyScaffold.existing);
           } else {
             print("Acaount doesn't exist");
           }
@@ -108,7 +126,7 @@ class DatabaseService {
   }
 
 //delete document
-  void deleteData(var id,String colection) {
+  void deleteData(var id, String colection) {
     try {
       print(id);
       databaseReference.collection(colection).document(id).delete();
