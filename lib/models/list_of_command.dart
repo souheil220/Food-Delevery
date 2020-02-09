@@ -12,7 +12,6 @@ class ListOfCommand {
   static List<ListOfCommand> _list = [];
 
   List<ListOfCommand> addCommade(ListOfCommand listOfCommand) {
-    print(_list.length);
     _list.add(listOfCommand);
     return _list;
   }

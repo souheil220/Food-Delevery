@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_world/ui/bottum_navigation_bar.dart';
 import 'package:hello_world/ui/delv_home.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
+import 'package:hello_world/ui/gps_not_enabled.dart';
 import 'package:hello_world/ui/login_register_delev.dart';
 import 'package:hello_world/ui/login_register_user.dart';
 import 'package:hello_world/ui/no_internet.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: EmptyScaffold.id,
         routes: {
+          GpsNotEnabled.id:(context) => GpsNotEnabled(),
           Profile.id:(context) => Profile(),
           NoInternet.id:(context) => NoInternet(),
           MyMap.id:(context) => MyMap(page,page),

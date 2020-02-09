@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hello_world/functions/costum_snack.dart';
 import 'package:hello_world/services/database.dart';
 import 'package:hello_world/services/memory_storage.dart';
-import 'package:hello_world/ui/connection.dart';
 //import '../style/theme.dart' as Theme;
 import '../utils/bubble_indication_painter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -185,22 +185,7 @@ class _LoginPageState extends State<LoginPage>
     _pageController = PageController();
   }
 
-  void showInSnackBar(String value) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    _scaffoldKey.currentState?.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
-        value,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-            fontFamily: "WorkSansSemiBold"),
-      ),
-      backgroundColor: Colors.blue,
-      duration: Duration(seconds: 3),
-    ));
-  }
+
 
   Widget _buildMenuBar(BuildContext context) {
     return Container(
@@ -500,7 +485,7 @@ class _LoginPageState extends State<LoginPage>
                 Padding(
                   padding: EdgeInsets.only(top: 10.0, right: 40.0),
                   child: GestureDetector(
-                    onTap: () => showInSnackBar("Facebook button pressed"),
+                    onTap: () =>CustomSnack().showInSnackBar(context,"Facebook button pressed",_scaffoldKey),
                     child: Container(
                       padding: const EdgeInsets.all(15.0),
                       decoration: new BoxDecoration(
@@ -517,7 +502,7 @@ class _LoginPageState extends State<LoginPage>
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: GestureDetector(
-                    onTap: () => showInSnackBar("Google button pressed"),
+                    onTap: () =>CustomSnack(). showInSnackBar(context,"Google button pressed",_scaffoldKey),
                     child: Container(
                       padding: const EdgeInsets.all(15.0),
                       decoration: new BoxDecoration(

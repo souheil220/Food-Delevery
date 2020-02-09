@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_world/functions/ask_permission.dart';
 import 'package:hello_world/services/currentLocation.dart';
+import 'package:hello_world/services/location_test.dart';
 import 'package:hello_world/ui/no_order.dart';
 import 'package:provider/provider.dart';
+import 'gps_not_enabled.dart';
 import 'my_card.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class BrewList extends StatefulWidget {
   static var currentLocation;
@@ -19,7 +20,18 @@ class BrewList extends StatefulWidget {
 class _BrewListState extends State<BrewList> {
   var _permission;
   bool _allowed = false;
-  final FirebaseMessaging _messaging = FirebaseMessaging();
+  bool gpsEnable = false;
+  _checkIfGpsIsEnabled()async{
+      await LocationTest().checkLocation().then((value){
+        setState(() {
+           gpsEnable = value;
+        });
+        if(!gpsEnable){
+          Navigator.of(context).pushReplacementNamed(GpsNotEnabled.id);
+        }
+    });
+  }
+  
 
   askUserPermission() async {
     _permission = await AskPermission().askForPermission();
@@ -43,12 +55,11 @@ class _BrewListState extends State<BrewList> {
 
   @override
   void initState() {
+    
     askUserPermission();
-
+    _checkIfGpsIsEnabled();
     super.initState();
-    _messaging.getToken().then((onValue) {
-      // print(onValue);
-    });
+    
   }
 
   @override

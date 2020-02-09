@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/services/location_test.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/home.dart';
 import 'package:hello_world/ui/no_order.dart';
 import 'package:hello_world/ui/order_list.dart';
 import 'package:hello_world/ui/profile.dart';
 
-import 'connection.dart';
+import '../services/connection.dart';
+import 'gps_not_enabled.dart';
 import 'no_internet.dart';
 
 class BottomNavigationBarre extends StatefulWidget {
@@ -18,6 +20,18 @@ class BottomNavigationBarre extends StatefulWidget {
 
 class _BottomNavigationBarreState extends State<BottomNavigationBarre> {
 bool _connected = true;
+bool gpsEnable = false;
+  _checkIfGpsIsEnabled()async{
+      await LocationTest().checkLocation().then((value){
+        setState(() {
+           gpsEnable = value;
+        });
+        if(!gpsEnable){
+          Navigator.of(context).pushReplacementNamed(GpsNotEnabled.id);
+        }
+    });
+  }
+  
   _chek() async {
     await Connection().checkInternetConnectivity().then((e) {
       _connected = e;
@@ -31,6 +45,7 @@ bool _connected = true;
   }
   @override
   void initState() {
+    _checkIfGpsIsEnabled();
     _chek();
     super.initState();
   }

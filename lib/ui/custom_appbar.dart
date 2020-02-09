@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/ui/cart_incon.dart';
 import 'package:hello_world/ui/list_of_food.dart';
 import '../bloc/cartListBloc.dart';
 import 'cart.dart';
@@ -19,7 +20,10 @@ class CustomAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(icon: Icon(Icons.arrow_back),onPressed:()=> Navigator.pop(context),),
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
             StreamBuilder(
               stream: bloc.listStream,
               builder: (context, snapshot) {
@@ -45,15 +49,7 @@ class CustomAppBar extends StatelessWidget {
           return;
         }
       },
-      child: Container(
-        margin: EdgeInsets.only(right: 30),
-        child: Text(length.toString()),
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.yellow[800],
-          borderRadius: BorderRadius.circular(50),
-        ),
-      ),
+      child: CartIcon(length),
     );
   }
 }

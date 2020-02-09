@@ -20,7 +20,7 @@ class NoInternet extends StatelessWidget {
             RaisedButton(
               child: Text('Reesseyer'),
               onPressed: () =>
-                  Navigator.of(context).pushNamed(EmptyScaffold.id),
+                  Navigator.of(context).pushReplacementNamed(EmptyScaffold.id),
             )
           ],
         ),
