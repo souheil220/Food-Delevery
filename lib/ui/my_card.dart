@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/functions/notification.dart';
-import 'package:hello_world/services/memory_storage.dart';
-import 'package:hello_world/ui/brew_list.dart';
-import 'package:hello_world/ui/empty_scaffild.dart';
+import '../functions/notification.dart';
+import '../services/memory_storage.dart';
+import '../ui/brew_list.dart';
+import '../ui/empty_scaffild.dart';
 import '../services/database.dart';
-import 'package:hello_world/ui/order_information_conf.dart';
+import '../ui/order_information_conf.dart';
 
 class MyCard extends StatefulWidget {
    var order;

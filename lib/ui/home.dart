@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
       _data = snapshot.value;
       setState(() {
         showSpinner = true;
-        print(showSpinner);
+       
       });
     });
   }

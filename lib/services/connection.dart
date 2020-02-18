@@ -11,7 +11,7 @@ class Connection{
     else{
       connected = true;
     }
-    print('here $connected');
+  //  print('here $connected');
     return connected;
   }
 }

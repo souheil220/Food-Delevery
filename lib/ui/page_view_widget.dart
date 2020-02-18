@@ -15,7 +15,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(PageViewWidget.controler);
+  
     return Scaffold(
       body: PageView(
         controller: PageViewWidget.controler,

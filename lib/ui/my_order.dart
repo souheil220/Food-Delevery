@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/database.dart';
+import 'package:hello_world/ui/chat.dart';
 import 'package:hello_world/ui/item_container.dart';
 import 'package:hello_world/ui/item_content.dart';
 
@@ -28,9 +29,9 @@ class MyOrder extends StatefulWidget {
   _MyOrderState createState() => _MyOrderState();
 }
 
-
 class _MyOrderState extends State<MyOrder> {
-  
+  bool _nottaken = true;
+  String _peerId;
   @override
   Widget build(BuildContext context) {
     final planetThumbnail = new Container(
@@ -86,16 +87,30 @@ class _MyOrderState extends State<MyOrder> {
                 children: <Widget>[
                   new Icon(Icons.location_on,
                       size: 14.0, color: Color(0x66FFFFFF)),
-                  // new Text(order.etat, style: MyOrder.planetDistance),
                   new Container(width: 24.0),
-                  new Icon(Icons.flight_land,
-                      size: 14.0, color: Color(0x66FFFFFF)),
-                  new Container(width: 24.0),
+                  new GestureDetector(
+                    child: chatIcon(),
+                    onTap: () {
+                      _nottaken
+                          ? null
+                          : Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => Chat(
+                                  peerAvatar: null,
+                                  peerId: _peerId,
+                                ),
+                              ),
+                            );
+                    },
+                  ),
+                  new SizedBox(width: 24.0),
                   StreamBuilder(
+                    
                     stream: DatabaseService(uid: '1').getEtat(widget.ido),
                     builder: (context, snapshot) {
+                     
                       return Container(
-                        child:  (snapshot.data).exists
+                        child: ((snapshot.data).exists)
                             ? prise(snapshot.data)
                             : nonPrise(),
                       );
@@ -108,7 +123,7 @@ class _MyOrderState extends State<MyOrder> {
         ),
       ),
     );
-    
+
     final maCommande = Container(
       margin: const EdgeInsets.only(left: 24.0, right: 24.0, top: 200.0),
       child: foodItemList(),
@@ -174,15 +189,18 @@ class _MyOrderState extends State<MyOrder> {
   }
 
   Widget prise(var result) {
-    return Flexible(
-      child: Text(
-        result["Etat"].toString(),
-        style: TextStyle(
-          color: Colors.green,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w300,
-          fontSize: 12.0,
-        ),
+    
+      print('gggggggggggggg ${result.exists}');
+      _nottaken = false;
+      _peerId = result['Taken by'];
+    
+    return Text(
+      result["Etat"],
+      style: TextStyle(
+        color: Colors.green,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w300,
+        fontSize: 12.0,
       ),
     );
   }
@@ -196,6 +214,12 @@ class _MyOrderState extends State<MyOrder> {
         fontWeight: FontWeight.w300,
         fontSize: 12.0,
       ),
+    );
+  }
+
+  Container chatIcon() {
+    return Container(
+      child: Icon(Icons.chat, size: 14.0, color: Color(0x66FFFFFF)),
     );
   }
 }

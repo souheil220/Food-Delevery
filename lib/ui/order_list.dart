@@ -4,7 +4,7 @@ import '../ui/my_order.dart';
 class OrderList extends StatefulWidget {
   List _lista;
   OrderList(this._lista);
-
+  
   static final id = 'order-list-page';
 
   @override
@@ -14,7 +14,7 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
-    print(widget._lista);
+   
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.all(8),

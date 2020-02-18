@@ -54,7 +54,7 @@ bool gpsEnable = false;
   int _currentIndex = 1;
 
   static widgetReturned() {
-    print(EmptyScaffold.list3);
+   
     if (EmptyScaffold.list3.isEmpty) {
       return NoOrder();
     } else {
@@ -69,6 +69,8 @@ bool gpsEnable = false;
   ];
   void onTappedBar(int index) {
     setState(() {
+      print(index);
+      print('EmptyScaffold.list3 ${EmptyScaffold.list3}');
       _currentIndex = index;
     });
   }

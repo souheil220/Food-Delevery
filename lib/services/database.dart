@@ -19,6 +19,8 @@ class DatabaseService {
       Firestore.instance.collection('pushToken');
   final CollectionReference orderTakenCollection =
       Firestore.instance.collection('orders Taken');
+  final CollectionReference messagesCollection =
+      Firestore.instance.collection('messages');
   final databaseReference = Firestore.instance;
 
   Future updateUserData(
@@ -32,6 +34,7 @@ class DatabaseService {
   }
 
   getEtat(var id) {
+   print(id);
     return orderTakenCollection.document(id.toString()).snapshots();
   }
 
@@ -48,6 +51,7 @@ class DatabaseService {
               NotificationUser().subscribeToTopic();
             }
             Navigator.pushNamed(context, page);
+            
             MemoryStorage().writeToFile(
                 {"email": email, 'type': typeOfUser},
                 EmptyScaffold.userdir,
@@ -55,7 +59,7 @@ class DatabaseService {
                 EmptyScaffold.userjsonFile1,
                 EmptyScaffold.userexisting);
             MemoryStorage().writeToFile(
-                null,
+                {'My Food': {}},
                 EmptyScaffold.dir,
                 'myJSONFile.json',
                 EmptyScaffold.jsonFile1,
@@ -76,9 +80,16 @@ class DatabaseService {
     );
   }
 
-  Future orderData(var namer, var photor, var listoffood, var location,
-      var totalAmount) async {
+  Future orderData(
+    var namer,
+    var photor,
+    var listoffood,
+    var location,
+    var totalAmount,
+  ) async {
+   
     var id = orderCollection.document().documentID;
+    FirebaseUser user = await FirebaseAuth.instance.currentUser(); 
     await orderCollection
         .document(orderCollection.document(id).documentID)
         .setData(
@@ -97,6 +108,7 @@ class DatabaseService {
         'Etat': 'waiting',
         'name': namer,
         'photo': photor,
+        'ConsumerId' : user.uid,
         'id': id,
       },
     );
@@ -105,13 +117,13 @@ class DatabaseService {
   }
 
 //creat collection of order taken
-  Future orderTaken(
-    var id,
-  ) async {
+  Future orderTaken(var id) async {
+     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     await orderTakenCollection
         .document(orderTakenCollection.document(id).documentID)
         .setData(
       {
+        'Taken by' : user.uid,
         'id': id,
         'Etat': "Pris en charge",
       },

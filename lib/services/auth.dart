@@ -22,6 +22,10 @@ class AuthService {
       return null;
     }
   }
+  //Log out 
+ Future logOut() async{
+   await _auth.signOut();
+  }
 
   // register with email and password
 

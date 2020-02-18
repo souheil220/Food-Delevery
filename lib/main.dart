@@ -1,6 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/ui/bottum_navigation_bar.dart';
+import 'package:hello_world/ui/chat.dart';
+import 'package:hello_world/ui/chatScreen.dart';
 import 'package:hello_world/ui/delv_home.dart';
 import 'package:hello_world/ui/empty_scaffild.dart';
 import 'package:hello_world/ui/gps_not_enabled.dart';
@@ -35,13 +37,16 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: EmptyScaffold.id,
+       initialRoute: EmptyScaffold.id,
+        
         routes: {
+         ChatScreen.id :(context) => ChatScreen(peerAvatar: page,peerId: page,),
+          '/chat':(context) => Chat(peerAvatar: null,peerId: null,),
           GpsNotEnabled.id:(context) => GpsNotEnabled(),
           Profile.id:(context) => Profile(),
           NoInternet.id:(context) => NoInternet(),
           MyMap.id:(context) => MyMap(page,page),
-          'Order-List': (context) => OrderList(page),
+          '/Order-List': (context) => OrderList(page),
           '/order-after-conf': (context) => OrderInformationConf(page, page),
           LoginRegisterUser.id: (context) => LoginRegisterUser(),
           EmptyScaffold.id: (context) => EmptyScaffold(),

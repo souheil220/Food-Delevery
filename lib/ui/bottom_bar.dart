@@ -1,6 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/my_food.dart';
+import 'package:hello_world/ui/login_page.dart';
 import '../bloc/cartListBloc.dart';
 import '../models/list_of_command.dart';
 import '../services/currentLocation.dart';
@@ -73,13 +74,17 @@ class _BottomBarState extends State<BottomBar> {
                 try {
                   location = await getCurrentLocation;
                   var value = await DatabaseService(uid: '1').orderData(
-                      ItemContainer.nom,
-                      ItemContainer.photo,
-                      listoffood,
-                      location,
-                      returnBenifice(widget.listOfFoods));
+                    ItemContainer.nom,
+                    ItemContainer.photo,
+                    listoffood,
+                    location,
+                    returnBenifice(widget.listOfFoods),
+                  );
 
                   var map0 = {};
+                  setState(() {
+                     id = value;
+                  });
                   List _list3 = [];
                   ListOfCommand listOfCommand;
                   listOfCommand = ListOfCommand(
@@ -92,7 +97,7 @@ class _BottomBarState extends State<BottomBar> {
                   bloc.emptyAllList(widget.listOfFoods);
 
                   setState(() {
-                    id = value;
+                   
 
                     List list0 = [];
                     List list1 = [];
@@ -107,21 +112,21 @@ class _BottomBarState extends State<BottomBar> {
                     }
 
                     int i = 0;
-                    print(list1[0].runtimeType);
+                   
                     list0.forEach((customer) {
                       map0[customer.commande] = ordrDetail(list1[i]);
                       i++;
                     });
                   });
-
-                 
-                  MemoryStorage().writeToFile(
+                
+                 MemoryStorage().writeToFile(
                       {'My Food': map0},
                       EmptyScaffold.dir,
                       'myJSONFile.json',
                       EmptyScaffold.jsonFile1,
                       EmptyScaffold.existing);
-
+                     // for(var i in _list3) print('list3 ${i.ido}');
+                 // EmptyScaffold.list3.add(map0);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

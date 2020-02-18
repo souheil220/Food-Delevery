@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 class CustomSnack{
   CustomSnack();
   void showInSnackBar(BuildContext context,String value,GlobalKey<ScaffoldState> _scaffoldKey) {
-    print(_scaffoldKey==null);
+  //  print(_scaffoldKey==null);
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(new SnackBar(

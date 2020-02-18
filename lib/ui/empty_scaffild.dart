@@ -53,8 +53,8 @@ class _EmptyScaffoldState extends State<EmptyScaffold> {
       EmptyScaffold.jsonFile1 = exist[0];
       EmptyScaffold.existing = exist[2];
     });
-    print('user $userexist');
-    print(exist[3]);
+  
+  
 
     if (userexist[2]==true) {
       if (userexist[3]['type'] == 'Deliverer') {

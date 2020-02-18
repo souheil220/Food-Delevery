@@ -38,12 +38,13 @@ class MemoryStorage {
 
   void writeToFile(Map<String, dynamic> content, Directory dirr, String fileNom,
       File jsonFile1, bool fileExist1) {
+     
     print("Writing to file!");
     if (fileExist1) {
       print("File exists");
       Map<String, dynamic> jsonFileContent =
           json.decode(jsonFile1.readAsStringSync());
-          print('jsonFileContent $jsonFileContent');
+         // print('jsonFileContent $jsonFileContent');
       jsonFileContent.addAll(content);
       jsonFile1.writeAsStringSync(jsonEncode(jsonFileContent));
     } else {
@@ -51,6 +52,6 @@ class MemoryStorage {
       createFile(content, dirr, fileNom);
     }
     fileContent = jsonDecode(jsonFile1.readAsStringSync());
-    print(fileContent);
+    //print(fileContent);
   }
 }

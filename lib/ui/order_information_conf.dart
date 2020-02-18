@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/services/auth.dart';
+import 'package:hello_world/ui/chat.dart';
 
 import 'my_location.dart';
 import 'my_orders.dart';
+import 'page_view_widget.dart';
 
 class OrderInformationConf extends StatefulWidget {
   static const id = 'order-Info-after-confirm';
   var order;
-  
+
   var myLocation;
-  OrderInformationConf(this.order,this.myLocation);
+  OrderInformationConf(this.order, this.myLocation);
 
   @override
   _OrderInformationConfState createState() => _OrderInformationConfState();
@@ -17,7 +20,6 @@ class OrderInformationConf extends StatefulWidget {
 class _OrderInformationConfState extends State<OrderInformationConf> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text('Information'),
@@ -29,24 +31,24 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 69),
-                child: coolOrders(MyOrders(widget.order),
-                    Text('Bénéfice : ${widget.order['Total']}'), MyLocation(widget.myLocation,widget.order)),
+                child: coolOrders(
+                    MyOrders(widget.order),
+                    Text('Bénéfice : ${widget.order['Total']}'),
+                    MyLocation(widget.myLocation, widget.order)),
               ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                 
-                    child: Container(
-                      alignment: new FractionalOffset(0.0, 0.5),
-                      width: 90.0,
-                      height: 90.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            widget.order['photo'],
-                          
+                  child: Container(
+                    alignment: new FractionalOffset(0.0, 0.5),
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(
+                          widget.order['photo'],
                         ),
                       ),
                     ),
@@ -81,7 +83,20 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
                 SizedBox(
                   width: 20,
                 ),
-                location
+                location,
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                    child: Icon(Icons.message),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              Chat(peerId: widget.order['ConsumerId'], peerAvatar: null),
+                        ),
+                      );
+                    }),
               ],
             ),
             Row(
@@ -96,7 +111,11 @@ class _OrderInformationConfState extends State<OrderInformationConf> {
                     Icons.close,
                   ),
                   textColor: Colors.red,
-                  onPressed: () => {},
+                  onPressed: () {
+                    final AuthService _auth = AuthService();
+                    _auth.logOut();
+                    Navigator.of(context).pushNamed(PageViewWidget.id);
+                  },
                 ),
               ],
             )
