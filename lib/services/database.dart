@@ -37,6 +37,10 @@ class DatabaseService {
    print(id);
     return orderTakenCollection.document(id.toString()).snapshots();
   }
+updateToken(var id,var token){
+   
+    Firestore.instance.collection('users').document(id).updateData({'pushToken': token});
+  }
 
   verifyIfDelevrer(
       BuildContext context, var typeOfUser, var page, String email) async {

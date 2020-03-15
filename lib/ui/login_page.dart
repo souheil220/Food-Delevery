@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hello_world/functions/costum_snack.dart';
 import 'package:hello_world/services/database.dart';
-import 'package:hello_world/services/memory_storage.dart';
 //import '../style/theme.dart' as Theme;
 import '../utils/bubble_indication_painter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -44,6 +46,8 @@ class _LoginPageState extends State<LoginPage>
   String _name;
   String _confirmPassword;
   bool showSpinner = false;
+  FirebaseUser user ;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -385,7 +389,13 @@ class _LoginPageState extends State<LoginPage>
                               .signInWithEmailAndPassword(_email, _password);
                         
                           if (_result != null) {
-                            
+                            user=await FirebaseAuth.instance.currentUser();
+                              firebaseMessaging.getToken().then((token) {  
+                                 DatabaseService().updateToken(user.uid, token);
+    
+  }).catchError((err) {
+    Fluttertoast.showToast(msg: err.message.toString());
+  });
                             DatabaseService().verifyIfDelevrer(
                                 context, widget.typeOfUser, widget.page,_email);
                           }
@@ -399,7 +409,7 @@ class _LoginPageState extends State<LoginPage>
                               e.toString(),
                             ),
                             actions: <Widget>[
-                              CupertinoDialogAction(child: Text('ok'),onPressed:()=>dispose() ,)
+                             FlatButton(onPressed:()=> dispose(), child: Text("OK"),),
                             ],
                           );
                         }
@@ -750,7 +760,15 @@ class _LoginPageState extends State<LoginPage>
                               setState(() {
                                 showSpinner = false;
                               });
-
+                             
+                             user=await FirebaseAuth.instance.currentUser();
+                              firebaseMessaging.getToken().then((token) {  
+                                 DatabaseService().updateToken(user.uid, token);
+    
+  }).catchError((err) {
+    Fluttertoast.showToast(msg: err.message.toString());
+  });
+                                    
                               Navigator.pushNamed(context, widget.page);
                             } else {
                               setState(() {

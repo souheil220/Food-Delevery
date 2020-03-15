@@ -368,7 +368,7 @@ class ChatScreenState extends State<ChatScreen> {
         isShowSticker = false;
       });
     } else {
-      Firestore.instance.collection('users').document(id).updateData({'chattingWith': null});
+     // Firestore.instance.collection('users').document(id).updateData({'chattingWith': null});
       Navigator.pop(context);
     }
 
